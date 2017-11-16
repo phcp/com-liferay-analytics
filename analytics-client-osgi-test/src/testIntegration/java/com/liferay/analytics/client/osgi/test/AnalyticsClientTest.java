@@ -19,8 +19,8 @@ import com.liferay.analytics.model.AnalyticsEventsMessage;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.test.rule.Inject;
-
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
+
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Ignore;
