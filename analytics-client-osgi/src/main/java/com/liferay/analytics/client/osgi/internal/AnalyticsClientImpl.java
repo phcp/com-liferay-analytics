@@ -42,7 +42,7 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 
 		properties.setProperty("hostName", _ANALYTICS_GATEWAY_HOST);
 		properties.setProperty("hostPort", _ANALYTICS_GATEWAY_PORT);
-		properties.setProperty("protocol", _ANALYTICS_GATEWAY_PORT);
+		properties.setProperty("protocol", _ANALYTICS_GATEWAY_PROTOCOL);
 
 		ComponentInstance componentInstance = _componentFactory.newInstance(
 			(Dictionary)properties);
@@ -51,11 +51,6 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 
 		_jsonWebServiceClient =
 			(JSONWebServiceClient)componentInstance.getInstance();
-
-		_jsonWebServiceClient.setProtocol(_ANALYTICS_GATEWAY_PROTOCOL);
-		_jsonWebServiceClient.setHostName(_ANALYTICS_GATEWAY_HOST);
-		_jsonWebServiceClient.setHostPort(
-			Integer.valueOf(_ANALYTICS_GATEWAY_PORT));
 	}
 
 	public String sendAnalytics(AnalyticsEventsMessage analyticsEventsMessage)
