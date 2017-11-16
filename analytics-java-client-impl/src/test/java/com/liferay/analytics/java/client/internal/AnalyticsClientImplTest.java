@@ -31,7 +31,7 @@ import org.junit.Test;
 public class AnalyticsClientImplTest {
 
 	@Test
-	public void testAnalyticsEventCreation() {
+	public void testAnalyticsEventCreation() throws Exception {
 		AnalyticsEventsMessage.Builder analyticsEventsMessageBuilder =
 			AnalyticsEventsMessage.builder("ApplicationKey", "UserId");
 
