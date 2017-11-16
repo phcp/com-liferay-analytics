@@ -24,6 +24,7 @@ import com.liferay.analytics.model.AnalyticsEventsMessage;
 @ProviderType
 public interface AnalyticsClient {
 
-	public Object sendAnalytics(AnalyticsEventsMessage analyticsEventsMessage);
+	public Object sendAnalytics(AnalyticsEventsMessage analyticsEventsMessage)
+		throws Exception;
 
 }
