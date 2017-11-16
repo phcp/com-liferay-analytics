@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.analytics.java.client.internal;
+package com.liferay.analytics.client.impl;
 
 import com.liferay.analytics.model.AnalyticsEventsMessage;
 
