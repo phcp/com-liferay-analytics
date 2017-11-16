@@ -16,10 +16,6 @@ package com.liferay.analytics.client.impl;
 
 import com.liferay.analytics.model.AnalyticsEventsMessage;
 
-import javax.ws.rs.core.Response;
-
-import org.apache.http.HttpStatus;
-
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -31,7 +27,7 @@ import org.junit.Test;
 public class AnalyticsClientImplTest {
 
 	@Test
-	public void testAnalyticsEventCreation() throws Exception {
+	public void testSendAnalytics() throws Exception {
 		AnalyticsEventsMessage.Builder analyticsEventsMessageBuilder =
 			AnalyticsEventsMessage.builder("ApplicationKey", "UserId");
 
@@ -48,10 +44,10 @@ public class AnalyticsClientImplTest {
 
 		analyticsEventsMessageBuilder.protocolVersion("1.0");
 
-		Response response = _analyticsClientImpl.sendAnalytics(
+		String jsonResponse = _analyticsClientImpl.sendAnalytics(
 			analyticsEventsMessageBuilder.build());
 
-		Assert.assertEquals(HttpStatus.SC_OK, response.getStatus());
+		Assert.assertNull(jsonResponse);
 	}
 
 	private final AnalyticsClientImpl _analyticsClientImpl =
