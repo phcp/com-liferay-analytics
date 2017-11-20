@@ -58,10 +58,10 @@ public class AnalyticsClientTest {
 
 		analyticsEventsMessageBuilder.protocolVersion("1.0");
 
-		Object jsonResponse = _analyticsClient.sendAnalytics(
+		Object response = _analyticsClient.sendAnalytics(
 			analyticsEventsMessageBuilder.build());
 
-		Assert.assertNull(jsonResponse);
+		Assert.assertNull(response);
 	}
 
 	@Inject

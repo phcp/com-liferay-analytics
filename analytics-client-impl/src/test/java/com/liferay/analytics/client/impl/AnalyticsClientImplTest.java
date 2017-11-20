@@ -44,10 +44,10 @@ public class AnalyticsClientImplTest {
 
 		analyticsEventsMessageBuilder.protocolVersion("1.0");
 
-		String jsonResponse = _analyticsClientImpl.sendAnalytics(
+		String response = _analyticsClientImpl.sendAnalytics(
 			analyticsEventsMessageBuilder.build());
 
-		Assert.assertNull(jsonResponse);
+		Assert.assertNull(response);
 	}
 
 	private final AnalyticsClientImpl _analyticsClientImpl =
