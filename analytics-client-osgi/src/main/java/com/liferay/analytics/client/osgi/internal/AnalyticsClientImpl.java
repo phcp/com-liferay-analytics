@@ -38,7 +38,7 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 
 	@Activate
 	public void activate() {
-		final Properties properties = new Properties();
+		Properties properties = new Properties();
 
 		properties.setProperty("hostName", _ANALYTICS_GATEWAY_HOST);
 		properties.setProperty("hostPort", _ANALYTICS_GATEWAY_PORT);
