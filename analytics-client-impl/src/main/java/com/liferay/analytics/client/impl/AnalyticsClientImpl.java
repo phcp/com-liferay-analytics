@@ -44,10 +44,10 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 					_ANALYTICS_GATEWAY_PATH));
 		}
 
-		_jsonWebServiceClient.setProtocol(_ANALYTICS_GATEWAY_PROTOCOL);
 		_jsonWebServiceClient.setHostName(_ANALYTICS_GATEWAY_HOST);
 		_jsonWebServiceClient.setHostPort(
 			Integer.valueOf(_ANALYTICS_GATEWAY_PORT));
+		_jsonWebServiceClient.setProtocol(_ANALYTICS_GATEWAY_PROTOCOL);
 
 		return _jsonWebServiceClient.doPostAsJSON(
 			_ANALYTICS_GATEWAY_PATH, jsonAnalyticsEventsMessage);
