@@ -145,7 +145,6 @@ public final class AnalyticsEventsMessage implements Serializable {
 			protected Builder(String applicationId, String eventId) {
 				_event._applicationId = applicationId;
 				_event._eventId = eventId;
-				_event._eventDate = new Date();
 			}
 
 			private final AnalyticsEventsMessage.Event _event =
@@ -157,7 +156,7 @@ public final class AnalyticsEventsMessage implements Serializable {
 		}
 
 		private String _applicationId;
-		private Date _eventDate;
+		private Date _eventDate = new Date();
 		private String _eventId;
 		private Map<String, String> _properties = new HashMap<>();
 
