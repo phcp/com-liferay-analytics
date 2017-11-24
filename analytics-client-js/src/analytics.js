@@ -4,10 +4,7 @@ import {
 	StorageMechanism,
 	LocalStorageMechanism,
 } from 'metal-storage';
-import LCSClient from './LCSClient';
-
-// Default Middlewares
-import './middlewares/defaults';
+import LCSClient from './LCSClient/LCSClient';
 
 // Default Plugins
 import defaultPlugins from './plugins/defaults';
