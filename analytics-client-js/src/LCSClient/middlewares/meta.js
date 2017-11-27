@@ -13,7 +13,6 @@ function getAttribute(selector, attribute) {
 /**
  * Updates context with general page information
  * @param {object} request Request object to alter
- * @param {object} analytics Analytics instance
  * @return {object} The updated request object
  */
 function meta(request) {

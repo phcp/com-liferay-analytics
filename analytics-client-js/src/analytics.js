@@ -1,64 +1,17 @@
-import schedule from 'schedule';
 import {LocalStorageMechanism, Storage} from 'metal-storage';
 
 import LCSClient from './LCSClient/LCSClient';
 import defaultPlugins from './plugins/defaults';
 
-const plugins = defaultPlugins;
-
 const ENV = window || global;
-const DEFAULT_FLUSH_TIME = 2000;
+const FLUSH_INTERVAL = 2000;
 const REQUEST_TIMEOUT = 5000;
 const STORAGE_KEY = 'lcs_client_batch';
 
 // Creates LocalStorage wrapper
 const storage = new Storage(new LocalStorageMechanism());
 
-/**
- * Serializes data and returns the result
- * @param {string} eventId
- * @param {string} applicationId
- * @param {object} properties
- * @return {object}
- */
-function serialize(eventId, applicationId, properties) {
-	const eventDate = new Date().toISOString();
-	return {
-		eventId,
-		eventDate,
-		applicationId,
-		properties,
-	};
-}
-
-/**
- * Returns a promise that times out after the given time limit is exceeded
- * @param {number} timeout
- * @return {object} Promise
- */
-function timeout(timeout) {
-	return new Promise((resolve, reject) => setTimeout(reject, timeout));
-}
-
-/**
- * Function to handle broken paths
- * @param {object} err
- */
-function handleError(err) {
-	console.log(err);
-}
-
-/**
- * Transform the given parameter to a function
- * @param {object} input
- * @return {object}
- */
-function functionize(input) {
-	if ('function' !== typeof input) {
-		return () => {};
-	}
-	return input;
-}
+let instance = null;
 
 /**
  * Analytics class that is desined to collect events that are captured
@@ -71,150 +24,179 @@ class Analytics {
 	 * Returns an Analytics instance and triggers the automatic flush loop
 	 * @param {object} config object to instantiate the Analytics tool
 	 */
-	constructor(config) {
-		const flushTime = config.autoFlushFrequency || DEFAULT_FLUSH_TIME;
+	constructor(
+		config = {
+			flushInterval: FLUSH_INTERVAL,
+		}
+	) {
+		if (!instance) {
+			instance = this;
+		}
 
-		this.config = config || {};
-		this.events = storage.get(STORAGE_KEY) || [];
-		this.flushIsInProgress = false;
+		instance.client = new LCSClient(config.uri);
+		instance.config = config;
+		instance.events = storage.get(STORAGE_KEY) || [];
+		instance.isFlushInProgress = false;
 
-		// Start automatic flush loop
-		this.timer = schedule.every(`${flushTime}ms`).do(() => this.flush());
+		// Initializes default plugins
 
-		// Executes default Plugins
-		plugins.forEach(plugin => plugin(this));
+		defaultPlugins.forEach(
+			plugin => plugin(instance)
+		);
+
+		// Starts flush loop
+
+		if (instance.flushInterval) {
+			clearInterval(instance.flushInterval);
+		}
+
+		instance.flushInterval = setInterval(
+			() => instance.flush(),
+			config.flushInterval
+		);
+
+		return instance;
 	}
 
 	/**
-	 * Registers an event that is to be sent to the LCS endpoint
-	 * @param {string} eventId - Id
-	 * @param {string} applicationId - application
-	 * @param {object} eventProps - complementary informations
+	 * Persists the event queue to the LocalStorage
+	 * @protected
 	 */
-	send(eventId, applicationId, eventProps) {
-		const data = serialize(eventId, applicationId, eventProps);
-		this.events.push(data);
-		this.persist();
+	_persist() {
+		storage.set(STORAGE_KEY, this.events);
+	}
+
+	/**
+	 * Serializes data and returns the result appending a timestamp to the returned
+	 * data as well
+	 * @param {string} eventId The event Id
+	 * @param {string} applicationId The application Id
+	 * @param {object} properties Additional properties to serialize
+	 * @protected
+	 * @return {object}
+	 */
+	_serialize(eventId, applicationId, properties) {
+		const eventDate = new Date().toISOString();
+
+		return {
+			eventId,
+			eventDate,
+			applicationId,
+			properties,
+		};
+	}
+
+	/**
+	 * Returns a promise that times out after the given time limit is exceeded
+	 * @param {number} timeout
+	 * @return {object} Promise
+	 */
+	_timeout(timeout) {
+		return new Promise(
+			(resolve, reject) => setTimeout(reject, timeout)
+		);
+	}
+
+	/**
+	 * Flushes the event queue and sends it to the registered endpoint. If no data
+	 * is pending or a flush is already in progress, the request will be ignored.
+	 * @return {object} A Promise that resolves successfully when the data has been
+	 * sent or no pending data was left to be sent
+	 */
+	flush() {
+		let result;
+
+		if (!this.isFlushInProgress && this.events.length) {
+			this.isFlushInProgress = true;
+
+			result = Promise.race(
+				[this.client.send(this), this._timeout(REQUEST_TIMEOUT)]
+			)
+				.then(() => this.reset())
+				.catch(console.error)
+				.then(() => (this.isFlushInProgress = false));
+		}
+		else {
+			result = Promise.resolve();
+		}
+
+		return result;
 	}
 
 	/**
 	 * Resets the event queue
 	 */
 	reset() {
-		this.events.splice(0, this.events.length);
-		this.persist();
+		this.events.length = 0;
+
+		this._persist();
 	}
 
 	/**
-	 * Persists the event queue to the LocalStorage
+	 * Registers an event that is to be sent to the LCS endpoint
+	 * @param {string} eventId Id of the event
+	 * @param {string} applicationId ID of the application that triggered the event
+	 * @param {object} eventProps Complementary information about the event
 	 */
-	persist() {
-		storage.set(STORAGE_KEY, this.events);
-	}
+	send(eventId, applicationId, eventProps) {
+		this.events = [
+			...this.events,
+			this._serialize(eventId, applicationId, eventProps),
+		];
 
-	/**
-	 * Sends the event queue to the LCS endpoint
-	 * @return {object} Promise
-	 */
-	flush() {
-		// do not attempt to trigger multiple flush actions until the previous one
-		// is terminated
-		if (this.flushIsInProgress) return Promise.resolve();
-
-		// no flush when there is nothing to push
-		if (this.events.length === 0) return Promise.resolve();
-
-		// flag to avoid overlapping requests
-		this.flushIsInProgress = true;
-
-		// race condition against finishing off before the timeout is triggered
-		return (
-			Promise.race([LCSClient.send(this), timeout(REQUEST_TIMEOUT)])
-				// resets our storage if sending the events went down well
-				.then(() => this.reset())
-				// any type of error must be handled
-				.catch(handleError)
-				// regardless the outcome the flag needs invalidation
-				.then(() => (this.flushIsInProgress = false))
-		);
+		this._persist();
 	}
 
 	/**
 	 * Registers the given plugin and executes its initialistion logic
-	 * @param {object} plugin
+	 * @param {Function} plugin An Analytics Plugin
 	 */
 	registerPlugin(plugin) {
-		plugin = functionize(plugin);
-		plugins.push(plugin);
-		plugin(this);
+		if (typeof plugin === 'function') {
+			plugin(this);
+		}
 	}
 
 	/**
 	 * Registers the given middleware. This middleware will be later on called
 	 * with the request object and this Analytics instance
-	 * @param {object} middleware
+	 * @param {Function} middleware A function that will be invoked on every request
 	 * @example
-	 * Analytics.registerMiddleware((request, analytics) => ... )
+	 * Analytics.registerMiddleware(
+	 *   (request, analytics) => {
+	 *     ...
+	 *   }
+	 * );
 	 */
 	registerMiddleware(middleware) {
-		middleware = functionize(middleware);
-		LCSClient.use(middleware);
+		if (typeof middleware === 'function') {
+			this.client.use(middleware);
+		}
 	}
 
 	/**
-	 * Returns the determined LCS endpoint
-	 * @return {string}
+	 * Creates a singleton instance of Analytics
+	 * @param {object} config Configuration object
+	 * @example
+	 * Analytics.create(
+	 *   {
+	 *	   flushInterval: 2000,
+	 *	   uri: 'https://ec-dev.liferay.com:8095/api/analyticsgateway/send-analytics-events'
+	 *	   userId: 'id-s7uatimmxgo',
+	 *     analyticsKey: 'MyAnalyticsKey',
+	 *   }
+	 * );
 	 */
-	getEndpointURL() {
-		return this.config.uri;
-	}
-
-	/**
-	 * Returns the event queue
-	 * @return {array}
-	 */
-	getEvents() {
-		return this.events;
-	}
-
-	/**
-	 * Returns the configuration object with which this instance was created
-	 * @return {object}
-	 */
-	getConfig() {
-		return this.config;
+	static create(config = {}) {
+		ENV.Analytics = new Analytics(config);
+		ENV.Analytics.create = Analytics.create;
 	}
 }
 
-// reference to the singleton Analytics instance
-let singleton;
-
-/**
- * Creates a singleton instance of Analytics
- * @param {object} config - configuration object to create a singleton instance of Analytics
- * @example
- * 	Analytics.create({
- *			analyticsKey: 'MyAnalyticsKey',
- *			userId: 'id-s7uatimmxgo',
- *			autoFlushFrequency: 2000,
- *			uri: 'https://ec-dev.liferay.com:8095/api/analyticsgateway/send-analytics-events'
- *	});
- */
-function create(config = {}) {
-	if (!singleton) {
-		singleton = new Analytics(config);
-		singleton.create = create;
-	}
-	// @TODO restart the timer if the Analytics.create is called more than one time
-	// with various auto flush frequency times
-	singleton.config = config;
-	ENV.Analytics = singleton;
-}
-
-// expose it to the global scope
+// Exposes Analytics.create to the global scope
 ENV.Analytics = {
-	create,
+	create: Analytics.create,
 };
 
-export {create};
-export default create;
+export {Analytics};
+export default Analytics;

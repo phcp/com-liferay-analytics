@@ -1,13 +1,14 @@
 {
 	"env": {
 		"browser": true,
-		"jest": true,
-		"mocha": true
+		"jest": true
 	},
 	"extends": "liferay",
 	"globals": {
+		"chai": true,
 		"global": true,
-		"Liferay": true
+		"Liferay": true,
+		"sinon": true
 	},
 	"parserOptions": {
 		"ecmaFeatures": {

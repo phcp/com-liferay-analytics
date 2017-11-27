@@ -1,6 +1,6 @@
 import resolution from './resolution';
-import timing from './timing';
 import scrolling from './scrolling';
+import timing from './timing';
 
-export {resolution, timing, scrolling};
-export default [resolution, timing, scrolling];
+export {resolution, scrolling, timing};
+export default [resolution, scrolling, timing];

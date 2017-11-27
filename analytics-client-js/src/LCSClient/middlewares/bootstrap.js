@@ -5,8 +5,8 @@
  * @return {object} The updated request object
  */
 function bootstrap(request, analytics) {
-	const config = analytics.getConfig();
-	const events = analytics.getEvents();
+	const config = analytics.config;
+	const events = analytics.events;
 
 	const requestBody = {
 		analyticsKey: config.analyticsKey,

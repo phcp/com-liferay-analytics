@@ -3,11 +3,6 @@
 	"bugs": {
 		"url": "https://github.com/liferay/com-liferay-analytics/issues"
 	},
-	"dependencies": {
-		"es6-promise": "^4.1.1",
-		"isomorphic-fetch": "^2.2.1",
-		"schedule": "^0.1.0"
-	},
 	"description": "Javascript client to capture and send analytics data to LCS server",
 	"devDependencies": {
 		"babel-core": "^6.26.0",
@@ -18,6 +13,7 @@
 		"eslint": "^4.11.0",
 		"eslint-config-liferay": "^2.0.9",
 		"fetch-mock": "^5.13.1",
+		"isomorphic-fetch": "^2.2.1",
 		"husky": "^0.14.3",
 		"karma": "^1.7.1",
 		"karma-babel-preprocessor": "^7.0.0",
@@ -46,8 +42,6 @@
 	},
 	"scripts": {
 		"build": "rimraf build/ && webpack",
-		"format": "prettier-eslint --write 'src/**/*.js' 'test/**/*.js'",
-		"lint": "eslint src/**/*.js",
 		"test": "npm run build && karma start karma.js"
 	},
 	"version": "1.0.0"

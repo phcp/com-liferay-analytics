@@ -11,6 +11,14 @@ const LCS_ENDPOINT =
  */
 class LCSClient {
 	/**
+	 * Constructor
+	 * @param {*} uri The Endpoint URI where the data should be sent
+	 */
+	constructor(uri = LCS_ENDPOINT) {
+		this.uri = uri;
+	}
+
+	/**
 	 * Returns a Request object with all data from the analytics instance
 	 * includin the batched event objects
 	 * @param {object} analytics The Analytics instance from which the data is extracted
@@ -72,9 +80,8 @@ class LCSClient {
 	 */
 	send(analytics) {
 		const request = this._getLCSRequest(analytics);
-		const url = analytics.getEndpointURL() || LCS_ENDPOINT;
 
-		return fetch(url, request).then(this._validateResponse);
+		return fetch(this.uri, request).then(this._validateResponse);
 	}
 
 	/**
@@ -84,7 +91,7 @@ class LCSClient {
 	 * @example
 	 * LCSClient.use(
 	 *   (req, analytics) => {
-	 *     req.firstEvent = analytics.getEvents()[0];
+	 *     req.firstEvent = analytics.events[0];
 	 *     req.myMetaInfo = 'myMetaInfo';
 	 *
 	 *     return req;
