@@ -1,5 +1,3 @@
-import LCSClient from '../LCSClient';
-
 const ATTR_KEY = 'property';
 const ATTR_VALUE = 'content';
 
@@ -15,6 +13,7 @@ const openGraphTagPatterns = [
 
 /**
  * Determines whether the given tag is a valid OpenGraph meta tag
+ * @param {object} elm
  * @return {boolean}
  */
 function isOpenGraphMetaTag(elm) {

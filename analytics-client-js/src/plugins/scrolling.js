@@ -8,6 +8,7 @@ const levelsReached = [];
  * before the specified delay has passed, it restarts the timer
  * @param {function} callback
  * @param {number} delay
+ * @return {Function}
  */
 function postponify(callback, delay) {
 	let timer;

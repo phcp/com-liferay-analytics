@@ -1,17 +1,22 @@
 const STORAGE_KEY = 'lcs_client_batch';
-const should = chai.should;
 const expect = chai.expect;
 const assert = chai.assert;
-const Analytics = window.Analytics;
-const fetchMock =  window.fetchMock;
 
+const Analytics = window.Analytics;
+const fetchMock = window.fetchMock;
+
+/**
+ *
+ * @param {*} eventsNumber
+ */
 function sendDummyEvents(eventsNumber = 5) {
 	for (let i = eventsNumber - 1; i > 0; i -= 1) {
 		const eventId = i;
 		const applicationId = 'test';
 		const properties = {a: 1, b: 2, c: 3};
+
 		Analytics.send(eventId, applicationId, properties);
-	};
+	}
 }
 
 describe('Analytics API', () => {
@@ -52,7 +57,6 @@ describe('Analytics API', () => {
 	});
 
 	it('Analytics.registerPlugin must process the given plugin and execute its initialisation', function() {
-
 		Analytics.create();
 
 		const plugin = analytics => {
@@ -62,14 +66,12 @@ describe('Analytics API', () => {
 
 		Analytics.registerPlugin(spy);
 		assert.isTrue(spy.calledOnce);
-
-	});	
+	});
 
 	it('Analytics instance must expose registerMiddleware function', () => {
 		Analytics.create();
 		Analytics.registerMiddleware.should.be.a('function');
 	});
-
 
 	it('Analytics.send() must add the given event to the event queue', () => {
 		const eventId = 'eventId';
@@ -87,10 +89,6 @@ describe('Analytics API', () => {
 	});
 
 	it('Analytics.send() must persist the given events to the LocalStorage', () => {
-		const eventId = 'eventId';
-		const applicationId = 'applicationId';
-		const properties = {a: 1, b: 2, c: 3};
-
 		const eventsNumber = 5;
 
 		Analytics.create();
@@ -133,7 +131,6 @@ describe('Analytics API', () => {
 	});
 
 	it('No overlapping requests are allowed', function() {
-
 		const AUTO_FLUSH_FREQUENCY = 2000;
 		let fetchCalled = 0;
 
@@ -147,7 +144,7 @@ describe('Analytics API', () => {
 		});
 
 		Analytics.create({
-			autoFlushFrequency: AUTO_FLUSH_FREQUENCY
+			autoFlushFrequency: AUTO_FLUSH_FREQUENCY,
 		});
 
 		sendDummyEvents();
@@ -155,13 +152,11 @@ describe('Analytics API', () => {
 		const spy = sinon.spy(Analytics, 'flush');
 
 		return new Promise(resolve => {
-
 			// It waits 3 loop cycle to make sure there is no further
 			// attempts to flush the storage since the first request has not yet
 			// been processed
 
 			setTimeout(() => {
-
 				// Flush must be called 3 times
 
 				assert.isTrue(spy.calledThrice);
@@ -173,29 +168,25 @@ describe('Analytics API', () => {
 				Analytics.flush.restore();
 				fetchMock.restore();
 				resolve();
-
 			}, AUTO_FLUSH_FREQUENCY * 3);
 		});
 	});
 
 	it('Analytics.registerMiddleware must process the given middleware', function() {
-
 		Analytics.create();
+
 		const middleware = (req, analytics) => {
 			analytics.should.be.equal(Analytics);
 			req.should.be.a('object');
 			return req;
 		};
+
 		const spy = sinon.spy(middleware);
 
 		Analytics.registerMiddleware(spy);
 		sendDummyEvents();
-		return Analytics
-			.flush()
-			.then(() => {
-				assert.isTrue(spy.calledOnce);
-			});
-
+		return Analytics.flush().then(() => {
+			assert.isTrue(spy.calledOnce);
+		});
 	});
-
 });

@@ -1,3 +1,7 @@
+/**
+ *
+ * @param {*} analytics
+ */
 function onload(analytics) {
 	const perfData = window.performance.timing;
 	const pageLoadTime = perfData.loadEventStart - perfData.navigationStart;
@@ -7,6 +11,10 @@ function onload(analytics) {
 	analytics.send('load', 'timing', props);
 }
 
+/**
+ *
+ * @param {*} analytics
+ */
 function unload(analytics) {
 	const perfData = window.performance.timing;
 	const viewDuration = new Date().getTime() - perfData.navigationStart;

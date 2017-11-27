@@ -46,7 +46,7 @@
 	},
 	"scripts": {
 		"build": "rimraf build/ && webpack",
-		"format": "prettier-eslint --write 'src/**/*.js'",
+		"format": "prettier-eslint --write 'src/**/*.js' 'test/**/*.js'",
 		"lint": "eslint src/**/*.js",
 		"test": "npm run build && karma start karma.js"
 	},

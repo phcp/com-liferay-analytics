@@ -42,6 +42,9 @@ function resolution(analytics) {
 /**
  * Middleware function to alter the event context with the
  * browser resolution informations
+ * @param {object} req
+ * @param {object} analytics
+ * @return {object} req
  */
 function extendContextWithResolutionData(req, analytics) {
 	req.context = {

@@ -1,13 +1,9 @@
 import schedule from 'schedule';
-import {
-	Storage,
-	StorageMechanism,
-	LocalStorageMechanism,
-} from 'metal-storage';
-import LCSClient from './LCSClient/LCSClient';
+import {LocalStorageMechanism, Storage} from 'metal-storage';
 
-// Default Plugins
+import LCSClient from './LCSClient/LCSClient';
 import defaultPlugins from './plugins/defaults';
+
 const plugins = defaultPlugins;
 
 const ENV = window || global;
@@ -20,6 +16,9 @@ const storage = new Storage(new LocalStorageMechanism());
 
 /**
  * Serializes data and returns the result
+ * @param {string} eventId
+ * @param {string} applicationId
+ * @param {object} properties
  * @return {object}
  */
 function serialize(eventId, applicationId, properties) {
@@ -34,6 +33,7 @@ function serialize(eventId, applicationId, properties) {
 
 /**
  * Returns a promise that times out after the given time limit is exceeded
+ * @param {number} timeout
  * @return {object} Promise
  */
 function timeout(timeout) {
@@ -50,7 +50,8 @@ function handleError(err) {
 
 /**
  * Transform the given parameter to a function
- * @param {mixed} input
+ * @param {object} input
+ * @return {object}
  */
 function functionize(input) {
 	if ('function' !== typeof input) {
@@ -68,7 +69,7 @@ function functionize(input) {
 class Analytics {
 	/**
 	 * Returns an Analytics instance and triggers the automatic flush loop
-	 * @param {object} configuration object to instantiate the Analytics tool
+	 * @param {object} config object to instantiate the Analytics tool
 	 */
 	constructor(config) {
 		const flushTime = config.autoFlushFrequency || DEFAULT_FLUSH_TIME;
@@ -113,7 +114,7 @@ class Analytics {
 
 	/**
 	 * Sends the event queue to the LCS endpoint
-	 * @returns {object} Promise
+	 * @return {object} Promise
 	 */
 	flush() {
 		// do not attempt to trigger multiple flush actions until the previous one
@@ -172,7 +173,6 @@ class Analytics {
 	 * Returns the event queue
 	 * @return {array}
 	 */
-
 	getEvents() {
 		return this.events;
 	}
@@ -192,7 +192,6 @@ let singleton;
 /**
  * Creates a singleton instance of Analytics
  * @param {object} config - configuration object to create a singleton instance of Analytics
- * @return {object} singleton instance of Analytics
  * @example
  * 	Analytics.create({
  *			analyticsKey: 'MyAnalyticsKey',

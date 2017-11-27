@@ -1,10 +1,12 @@
 {
 	"env": {
 		"browser": true,
-		"jest": true
+		"jest": true,
+		"mocha": true
 	},
 	"extends": "liferay",
 	"globals": {
+		"global": true,
 		"Liferay": true
 	},
 	"parserOptions": {

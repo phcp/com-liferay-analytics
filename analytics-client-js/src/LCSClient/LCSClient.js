@@ -10,19 +10,19 @@ const LCS_ENDPOINT =
 
 /**
  * Returns a resolved or rejected promise as per the response status
- * @param {object} The Analytics instance from which the data is extracted
+ * @param {object} analytics The Analytics instance from which the data is extracted
  * @return {object} Promise object representing the result of the operation
  */
 function send(analytics) {
 	const request = getLCSRequest(analytics);
 	const url = analytics.getEndpointURL() || LCS_ENDPOINT;
-	return fetch(LCS_ENDPOINT, request).then(validate);
+	return fetch(url, request).then(validate);
 }
 
 /**
  * Returns a Request object with all data from the analytics instance
  * includin the batched event objects
- * @param {object} The Analytics instance from which the data is extracted
+ * @param {object} analytics The Analytics instance from which the data is extracted
  * @return {object} Request
  */
 function getLCSRequest(analytics) {
@@ -44,7 +44,7 @@ function getLCSRequest(analytics) {
 /**
  * Returns the formatted version of the analytics data that complies to the
  * predefined request specification of the LCS endpoint
- * @param {object} The Analytics instance from which the data is extracted
+ * @param {object} analytics The Analytics instance from which the data is extracted
  * @return {object} object literal
  */
 function getRequestBody(analytics) {
