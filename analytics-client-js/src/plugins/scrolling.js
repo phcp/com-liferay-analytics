@@ -1,5 +1,5 @@
 // Predfined scroll levels
-// Change this number to use more or less levels 
+// Change this number to use more or less levels
 const scrollDepthLevels = 4; // 25, 50, 75, 100
 const levelsReached = [];
 
@@ -33,7 +33,7 @@ function getDocumentHeight() {
 	const heights = [
 		document.body.clientHeight,
 		document.documentElement.clientHeight,
-		document.documentElement.scrollHeight	
+		document.documentElement.scrollHeight,
 	];
 	return Math.max(...heights);
 }
@@ -41,7 +41,7 @@ function getDocumentHeight() {
 /**
  * Processes the current scroll location and calculates the scroll depth level
  * If the client reaches one of the pre-defined levels that is yet unreached
- * it registers an analytics event 
+ * it registers an analytics event
  * @param {object} analytics
  */
 function processScrollPosition(analytics) {
@@ -53,12 +53,12 @@ function processScrollPosition(analytics) {
 	const depthLevel = Math.floor(depth / step);
 
 	// Sends every individual scroll levels only once when the client
-	// reaches it 
+	// reaches it
 	if (levelsReached.some(val => val === depthLevel)) return;
 
 	levelsReached.push(depthLevel);
 	if (depthLevel > 0) {
-		sendScrollEvent(analytics, depthLevel * step);	
+		sendScrollEvent(analytics, depthLevel * step);
 	}
 }
 
@@ -69,7 +69,7 @@ function processScrollPosition(analytics) {
  */
 function sendScrollEvent(analytics, scrollDepth) {
 	const props = {
-		scrollDepth
+		scrollDepth,
 	};
 	analytics.send('depthReached', 'scrolling', props);
 }
@@ -79,7 +79,6 @@ function sendScrollEvent(analytics, scrollDepth) {
  * @param {object} analytics
  */
 function scrolling(analytics) {
-
 	// The callback is going to be registered against the universal scroll
 	// event, but it must be excecuted only when the scroll settles
 	// for over 1500 milliseconds.
@@ -88,9 +87,10 @@ function scrolling(analytics) {
 	document.addEventListener('scroll', callback);
 
 	// In case of SPA
-	window.addEventListener('load', () => levelsReached.splice(0, levelsReached.length))
+	window.addEventListener('load', () =>
+		levelsReached.splice(0, levelsReached.length)
+	);
+}
 
-};
-
-export { scrolling };
+export {scrolling};
 export default scrolling;

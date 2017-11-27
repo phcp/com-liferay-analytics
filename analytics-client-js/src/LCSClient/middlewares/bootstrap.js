@@ -20,5 +20,5 @@ function bootstrap(req, analytics) {
 	};
 }
 
-export { bootstrap };
+export {bootstrap};
 export default bootstrap;

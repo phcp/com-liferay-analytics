@@ -2,8 +2,12 @@
  * Cross-browser solution that returns the width of the client area
  * @return {integer}
  */
-function getWidth() { 
-	return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+function getWidth() {
+	return (
+		window.innerWidth ||
+		document.documentElement.clientWidth ||
+		document.body.clientWidth
+	);
 }
 
 /**
@@ -11,7 +15,11 @@ function getWidth() {
  * @return {integer}
  */
 function getHeight() {
-	return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	return (
+		window.innerHeight ||
+		document.documentElement.clientHeight ||
+		document.body.clientHeight
+	);
 }
 
 /**
@@ -25,14 +33,14 @@ function getDevicePixelRatio() {
 /**
  * Registers a custom middleware to alter the event context
  * with the current resolution of the browsers client area
- * @param {object} analytics - Analytics singleton instance  
+ * @param {object} analytics - Analytics singleton instance
  */
 function resolution(analytics) {
 	analytics.registerMiddleware(extendContextWithResolutionData);
 }
 
 /**
- * Middleware function to alter the event context with the 
+ * Middleware function to alter the event context with the
  * browser resolution informations
  */
 function extendContextWithResolutionData(req, analytics) {
@@ -40,10 +48,10 @@ function extendContextWithResolutionData(req, analytics) {
 		screenWidth: getWidth(),
 		screenHeight: getHeight(),
 		devicePixelRatio: getDevicePixelRatio(),
-		...req.context
-	}
+		...req.context,
+	};
 	return req;
 }
 
-export { resolution };
+export {resolution};
 export default resolution;

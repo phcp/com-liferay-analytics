@@ -35,5 +35,5 @@ function context(req) {
 	return req;
 }
 
-export { context };
+export {context};
 export default context;

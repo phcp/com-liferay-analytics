@@ -1,17 +1,17 @@
 function onload(analytics) {
-	const perfData = window.performance.timing; 
+	const perfData = window.performance.timing;
 	const pageLoadTime = perfData.loadEventStart - perfData.navigationStart;
 	const props = {
-		pageLoadTime
+		pageLoadTime,
 	};
 	analytics.send('load', 'timing', props);
 }
 
 function unload(analytics) {
-	const perfData = window.performance.timing; 
+	const perfData = window.performance.timing;
 	const viewDuration = new Date().getTime() - perfData.navigationStart;
 	const props = {
-		viewDuration
+		viewDuration,
 	};
 	analytics.send('unload', 'timing', props);
 }
@@ -23,7 +23,7 @@ function unload(analytics) {
 function timing(analytics) {
 	window.addEventListener('load', onload.bind(null, analytics));
 	window.addEventListener('unload', unload.bind(null, analytics));
-};
+}
 
-export { timing };
+export {timing};
 export default timing;

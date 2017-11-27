@@ -54,7 +54,7 @@ function handleError(err) {
  */
 function functionize(input) {
 	if ('function' !== typeof input) {
-		 return () => {};
+		return () => {};
 	}
 	return input;
 }
@@ -152,12 +152,12 @@ class Analytics {
 	 * Registers the given middleware. This middleware will be later on called
 	 * with the request object and this Analytics instance
 	 * @param {object} middleware
-	 * @example 
+	 * @example
 	 * Analytics.registerMiddleware((request, analytics) => ... )
 	 */
 	registerMiddleware(middleware) {
 		middleware = functionize(middleware);
-		LCSClient.use(middleware);		
+		LCSClient.use(middleware);
 	}
 
 	/**
@@ -184,8 +184,7 @@ class Analytics {
 	getConfig() {
 		return this.config;
 	}
-
-};
+}
 
 // reference to the singleton Analytics instance
 let singleton;

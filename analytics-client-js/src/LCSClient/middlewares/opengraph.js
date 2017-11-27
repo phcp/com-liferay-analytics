@@ -10,7 +10,7 @@ const openGraphTagPatterns = [
 	/^article:/,
 	/^book:/,
 	/^profile:/,
-	/^fb:/
+	/^fb:/,
 ];
 
 /**
@@ -19,7 +19,7 @@ const openGraphTagPatterns = [
  */
 function isOpenGraphMetaTag(elm) {
 	if (!elm || !elm.getAttribute) return false;
-	
+
 	const property = elm.getAttribute(ATTR_KEY);
 	if (!property) return false;
 
@@ -32,16 +32,13 @@ function isOpenGraphMetaTag(elm) {
  */
 function getOpenGraphMetaData() {
 	const metas = [].slice.call(document.querySelectorAll('meta'));
-	return metas
-		.filter(meta => isOpenGraphMetaTag(meta))
-		.reduce((data, meta) => {
-			return {
-				[meta.getAttribute(ATTR_KEY)]: meta.getAttribute(ATTR_VALUE),
-				...data
-			};
-		}, {});
+	return metas.filter(meta => isOpenGraphMetaTag(meta)).reduce((data, meta) => {
+		return {
+			[meta.getAttribute(ATTR_KEY)]: meta.getAttribute(ATTR_VALUE),
+			...data,
+		};
+	}, {});
 }
-
 
 /**
  * middleware function that augments the request with OpenGraph informations
@@ -56,5 +53,5 @@ function openGraph(req) {
 	return req;
 }
 
-export { openGraph };
+export {openGraph};
 export default openGraph;
