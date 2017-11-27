@@ -1,6 +1,3 @@
-const ATTR_KEY = 'property';
-const ATTR_VALUE = 'content';
-
 const openGraphTagPatterns = [
 	/^og:.*/,
 	/^music:/,
@@ -12,44 +9,52 @@ const openGraphTagPatterns = [
 ];
 
 /**
- * Determines whether the given tag is a valid OpenGraph meta tag
- * @param {object} elm
+ * Determines whether the given element is a valid OpenGraph meta tag
+ * @param {object} element
  * @return {boolean}
  */
-function isOpenGraphMetaTag(elm) {
-	if (!elm || !elm.getAttribute) return false;
+function isOpenGraphElement(element) {
+	let isOpenGraphMetaTag = false;
 
-	const property = elm.getAttribute(ATTR_KEY);
-	if (!property) return false;
+	if (element && element.getAttribute) {
+		const property = element.getAttribute('property');
 
-	return openGraphTagPatterns.some(regExp => property.match(regExp));
+		if (property) {
+			isOpenGraphMetaTag = openGraphTagPatterns.some(
+				regExp => property.match(regExp)
+			);
+		}
+	}
+
+	return isOpenGraphMetaTag;
 }
 
 /**
- * Collects all OpenGraph meta information from the <head> section
- * @return {object} key-value collection of open graph tags
+ * Updates context with OpenGraph information
+ * @param {object} request Request object to alter
+ * @param {object} analytics Analytics instance
+ * @return {object} The updated request object
  */
-function getOpenGraphMetaData() {
-	const metas = [].slice.call(document.querySelectorAll('meta'));
-	return metas.filter(meta => isOpenGraphMetaTag(meta)).reduce((data, meta) => {
-		return {
-			[meta.getAttribute(ATTR_KEY)]: meta.getAttribute(ATTR_VALUE),
-			...data,
-		};
-	}, {});
-}
+function openGraph(request) {
+	const elements = [].slice.call(document.querySelectorAll('meta'));
+	const openGraphElements = elements.filter(isOpenGraphElement);
 
-/**
- * middleware function that augments the request with OpenGraph informations
- * @param {object} req - request object to alter
- * @return {object} the updated request object
- */
-function openGraph(req) {
-	req.context = {
-		...getOpenGraphMetaData(),
-		...req.context,
+	const openGraphData = openGraphElements.reduce(
+		(data, meta) => {
+			return {
+				[meta.getAttribute('property')]: meta.getAttribute('content'),
+				...data,
+			};
+		},
+		{}
+	);
+
+	request.context = {
+		...openGraphData,
+		...request.context,
 	};
-	return req;
+
+	return request;
 }
 
 export {openGraph};

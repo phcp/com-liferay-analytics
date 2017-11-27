@@ -1,39 +1,34 @@
 /**
  * Generates a local helper function to fetch information from DOM elements
- * @param {string} query - query string
- * @param {string} attr - attribute to fetch
- * @return {string} value of the specified attribute
+ * @param {string} selector A CSS selector query string
+ * @param {string} attribute The element attribute to get
+ * @return {string} Value of the specified attribute
  */
-function getQuery(query, attr) {
-	return function() {
-		const tag = document.querySelector(query) || {};
-		return tag[attr] || '';
-	};
-}
+function getAttribute(selector, attribute) {
+	const tag = document.querySelector(selector) || {};
 
-// shorthand functions
-const getDescription = getQuery('meta[name="description"]', 'content');
-const getKeywords = getQuery('meta[name="keywords"]', 'content');
-const getTitle = getQuery('title', 'innerHTML');
+	return tag[attribute] || '';
+}
 
 /**
- * middleware function that augments the request with context informations
- * @param {object} req - request object to alter
- * @param {object} analytics - Analytics instance to extract behaviour informations from it
- * @return {object} the updated request object
+ * Updates context with general page information
+ * @param {object} request Request object to alter
+ * @param {object} analytics Analytics instance
+ * @return {object} The updated request object
  */
-function context(req) {
-	req.context = {
-		description: getDescription(),
-		keywords: getKeywords(),
+function meta(request) {
+	request.context = {
+		description: getAttribute('meta[name="description"]', 'content'),
+		keywords: getAttribute('meta[name="keywords"]', 'content'),
 		languageId: navigator.language,
-		title: getTitle(),
+		title: getAttribute('title', 'innerHTML'),
 		url: location.href,
 		userAgent: navigator.userAgent,
-		...req.context,
+		...request.context,
 	};
-	return req;
+
+	return request;
 }
 
-export {context};
-export default context;
+export {meta};
+export default meta;

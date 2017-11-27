@@ -1,12 +1,13 @@
 /**
  * Bootstraps the basic message to LCS
- * @param {object} req - request object to alter
- * @param {object} analytics - Analytics instance to extract behaviour informations from it
- * @return {object} the updated request object
+ * @param {object} request Request object to alter
+ * @param {object} analytics Analytics instance
+ * @return {object} The updated request object
  */
-function bootstrap(req, analytics) {
-	const events = analytics.getEvents();
+function bootstrap(request, analytics) {
 	const config = analytics.getConfig();
+	const events = analytics.getEvents();
+
 	const requestBody = {
 		analyticsKey: config.analyticsKey,
 		context: {},
@@ -14,10 +15,8 @@ function bootstrap(req, analytics) {
 		userId: config.userId,
 		events,
 	};
-	return {
-		...requestBody,
-		...req,
-	};
+
+	return {...requestBody, ...request};
 }
 
 export {bootstrap};
