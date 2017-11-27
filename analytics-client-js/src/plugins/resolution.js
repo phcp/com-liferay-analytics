@@ -1,59 +1,36 @@
 /**
- * Cross-browser solution that returns the width of the client area
- * @return {integer}
+ * Updates context with browser resolution information
+ * @param {object} request Request object to alter
+ * @return {object} The updated request object
  */
-function getWidth() {
-	return (
-		window.innerWidth ||
-		document.documentElement.clientWidth ||
-		document.body.clientWidth
-	);
-}
+function extendContextWithResolutionData(request) {
+	const devicePixelRatio = window.devicePixelRatio || 1;
 
-/**
- * Cross-browser solution that returns the height of the client area
- * @return {integer}
- */
-function getHeight() {
-	return (
-		window.innerHeight ||
+	const screenHeight = window.innerHeight ||
 		document.documentElement.clientHeight ||
-		document.body.clientHeight
-	);
+		document.body.clientHeight;
+
+	const screenWidth = window.innerWidth ||
+		document.documentElement.clientWidth ||
+		document.body.clientWidth;
+
+	request.context = {
+		devicePixelRatio,
+		screenHeight,
+		screenWidth,
+		...request.context,
+	};
+
+	return request;
 }
 
 /**
- * Returns the device pixel ratio if accessable
- * @return {number}
- */
-function getDevicePixelRatio() {
-	return window.devicePixelRatio || 1;
-}
-
-/**
- * Registers a custom middleware to alter the event context
+ * Plugin function that registers a custom middleware to alter the event context
  * with the current resolution of the browsers client area
- * @param {object} analytics - Analytics singleton instance
+ * @param {object} analytics The Analytics client
  */
 function resolution(analytics) {
 	analytics.registerMiddleware(extendContextWithResolutionData);
-}
-
-/**
- * Middleware function to alter the event context with the
- * browser resolution informations
- * @param {object} req
- * @param {object} analytics
- * @return {object} req
- */
-function extendContextWithResolutionData(req, analytics) {
-	req.context = {
-		screenWidth: getWidth(),
-		screenHeight: getHeight(),
-		devicePixelRatio: getDevicePixelRatio(),
-		...req.context,
-	};
-	return req;
 }
 
 export {resolution};

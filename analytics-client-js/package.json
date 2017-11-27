@@ -44,5 +44,8 @@
 		"build": "rimraf build/ && webpack",
 		"test": "npm run build && karma start karma.js"
 	},
-	"version": "1.0.0"
+	"version": "1.0.0",
+	"dependencies": {
+		"metal-debounce": "^2.0.0"
+	}
 }
