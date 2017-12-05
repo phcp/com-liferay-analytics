@@ -101,7 +101,7 @@ public class AnalyticsEventsMessageJSONObjectMapperTest {
 
 		expectedJSONString = expectedJSONString.replace(
 			"2017-11-20T19:52:56.723Z",
-			ISO8601Utils.format(event.getEventDate(), false));
+			ISO8601Utils.format(event.getEventDate(), true));
 
 		String actualJSONString = _jsonObjectMapper.map(messageBuilder.build());
 
