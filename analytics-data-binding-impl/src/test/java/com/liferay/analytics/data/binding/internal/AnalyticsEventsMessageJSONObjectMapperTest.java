@@ -115,7 +115,7 @@ public class AnalyticsEventsMessageJSONObjectMapperTest {
 
 		byte[] bytes = Files.readAllBytes(Paths.get(url.toURI()));
 
-		return new String(bytes);
+		return new String(bytes, "UTF-8");
 	}
 
 	private final JSONObjectMapper<AnalyticsEventsMessage> _jsonObjectMapper =
