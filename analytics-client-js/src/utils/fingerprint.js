@@ -6,7 +6,8 @@ function getBrowserPluginDetails() {
     return Array.from(navigator.plugins)
         .map(plugin => plugin.name)
         .reduce(
-            (plugins, plugin) => `${plugins},${plugin}`
+            (plugins, plugin) => `${plugins},${plugin}`,
+            ''
         );
 }
 
