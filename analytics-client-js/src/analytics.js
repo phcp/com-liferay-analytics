@@ -2,11 +2,13 @@ import {LocalStorageMechanism, Storage} from 'metal-storage';
 
 import LCSClient from './LCSClient/LCSClient';
 import defaultPlugins from './plugins/defaults';
+import fingerprint from './utils/fingerprint';
 
 const ENV = window || global;
 const FLUSH_INTERVAL = 2000;
 const REQUEST_TIMEOUT = 5000;
-const STORAGE_KEY = 'lcs_client_batch';
+const STORAGE_KEY_EVENTS = 'lcs_client_batch';
+const STORAGE_KEY_USER_ID = 'lcs_client_user_id';
 
 // Creates LocalStorage wrapper
 const storage = new Storage(new LocalStorageMechanism());
@@ -24,18 +26,20 @@ class Analytics {
 	 * Returns an Analytics instance and triggers the automatic flush loop
 	 * @param {object} config object to instantiate the Analytics tool
 	 */
-	constructor(
-		config = {
-			flushInterval: FLUSH_INTERVAL,
-		}
-	) {
+	constructor(config) {
 		if (!instance) {
 			instance = this;
 		}
 
-		instance.client = new LCSClient(config.uri);
+		const client = new LCSClient(config.uri);
+
+		instance.client = client;
+
+		instance._sendData = client.send.bind(client, this);
+
 		instance.config = config;
-		instance.events = storage.get(STORAGE_KEY) || [];
+		instance.identityEndpoint = `http://pulpo-engine-contacts-pre.eu-west-1.elasticbeanstalk.com/${this.config.analyticsKey}/identity`;
+		instance.events = storage.get(STORAGE_KEY_EVENTS) || [];
 		instance.isFlushInProgress = false;
 
 		// Initializes default plugins
@@ -52,7 +56,7 @@ class Analytics {
 
 		instance.flushInterval = setInterval(
 			() => instance.flush(),
-			config.flushInterval
+			config.flushInterval || FLUSH_INTERVAL
 		);
 
 		return instance;
@@ -62,8 +66,10 @@ class Analytics {
 	 * Persists the event queue to the LocalStorage
 	 * @protected
 	 */
-	_persist() {
-		storage.set(STORAGE_KEY, this.events);
+	_persist(key, data) {
+		storage.set(key, data);
+
+		return data;
 	}
 
 	/**
@@ -98,6 +104,39 @@ class Analytics {
 	}
 
 	/**
+	 * Gets the userId for the existing analytics user. Previously generated ids
+	 * are stored and retrieved before attempting to query the Identity Service
+	 * for a new id based on the current machine fingerprint.
+	 * @return {Promise} A promise resolved with the stored or generated userId
+	 */
+	_getUserId() {
+		const userId = storage.get(STORAGE_KEY_USER_ID);
+
+		if (userId) {
+			return Promise.resolve(userId);
+		}
+		else {
+			const body = JSON.stringify(fingerprint());
+			const headers = new Headers();
+
+			headers.append('Content-Type', 'application/json');
+
+			const request = {
+				body,
+				cache: 'default',
+				credentials: 'same-origin',
+				headers,
+				method: 'POST',
+				mode: 'cors',
+			};
+
+			return fetch(this.identityEndpoint, request)
+				.then(resp => resp.text())
+				.then(userId => this._persist(STORAGE_KEY_USER_ID, userId));
+		}
+	}
+
+	/**
 	 * Flushes the event queue and sends it to the registered endpoint. If no data
 	 * is pending or a flush is already in progress, the request will be ignored.
 	 * @return {object} A Promise that resolves successfully when the data has been
@@ -110,7 +149,10 @@ class Analytics {
 			this.isFlushInProgress = true;
 
 			result = Promise.race(
-				[this.client.send(this), this._timeout(REQUEST_TIMEOUT)]
+				[
+					this._getUserId().then(instance._sendData),
+					this._timeout(REQUEST_TIMEOUT)
+				]
 			)
 				.then(() => this.reset())
 				.catch(console.error)
@@ -129,7 +171,7 @@ class Analytics {
 	reset() {
 		this.events.length = 0;
 
-		this._persist();
+		this._persist(STORAGE_KEY_EVENTS, this.events);
 	}
 
 	/**
@@ -144,7 +186,7 @@ class Analytics {
 			this._serialize(eventId, applicationId, eventProps),
 		];
 
-		this._persist();
+		this._persist(STORAGE_KEY_EVENTS, this.events);
 	}
 
 	/**
