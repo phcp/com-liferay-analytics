@@ -116,7 +116,12 @@ class Analytics {
 			return Promise.resolve(userId);
 		}
 		else {
-			const body = JSON.stringify(fingerprint());
+			const bodyData = {
+				...this.config.identity,
+				...fingerprint(),
+			};
+
+			const body = JSON.stringify(bodyData);
 			const headers = new Headers();
 
 			headers.append('Content-Type', 'application/json');
@@ -166,6 +171,33 @@ class Analytics {
 	}
 
 	/**
+	 * Registers the given plugin and executes its initialistion logic
+	 * @param {Function} plugin An Analytics Plugin
+	 */
+	registerPlugin(plugin) {
+		if (typeof plugin === 'function') {
+			plugin(this);
+		}
+	}
+
+	/**
+	 * Registers the given middleware. This middleware will be later on called
+	 * with the request object and this Analytics instance
+	 * @param {Function} middleware A function that will be invoked on every request
+	 * @example
+	 * Analytics.registerMiddleware(
+	 *   (request, analytics) => {
+	 *     ...
+	 *   }
+	 * );
+	 */
+	registerMiddleware(middleware) {
+		if (typeof middleware === 'function') {
+			this.client.use(middleware);
+		}
+	}
+
+	/**
 	 * Resets the event queue
 	 */
 	reset() {
@@ -190,29 +222,19 @@ class Analytics {
 	}
 
 	/**
-	 * Registers the given plugin and executes its initialistion logic
-	 * @param {Function} plugin An Analytics Plugin
+	 * Sets the current user identity in the system. This is meant to be invoked
+	 * by consumers every time an identity change is detected. This will trigger
+	 * an automatic reconciliation between the previous identity and the new one
+	 * @param {object} identity A key-value pair object that identifies the user
 	 */
-	registerPlugin(plugin) {
-		if (typeof plugin === 'function') {
-			plugin(this);
-		}
-	}
+	setIdentity(identity) {
+		const userId = storage.get(STORAGE_KEY_USER_ID);
 
-	/**
-	 * Registers the given middleware. This middleware will be later on called
-	 * with the request object and this Analytics instance
-	 * @param {Function} middleware A function that will be invoked on every request
-	 * @example
-	 * Analytics.registerMiddleware(
-	 *   (request, analytics) => {
-	 *     ...
-	 *   }
-	 * );
-	 */
-	registerMiddleware(middleware) {
-		if (typeof middleware === 'function') {
-			this.client.use(middleware);
+		storage.remove(STORAGE_KEY_USER_ID);
+
+		instance.config.identity = {
+			userId,
+			identity,
 		}
 	}
 
