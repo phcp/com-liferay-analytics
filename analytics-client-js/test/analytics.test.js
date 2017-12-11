@@ -1,4 +1,5 @@
 const ANALYTICS_KEY = 'ANALYTICS_KEY';
+const ANALYTICS_IDENTITY = {email: 'foo@bar.com'};
 const FLUSH_INTERVAL = 100;
 const LOCAL_USER_ID = 'LOCAL_USER_ID';
 const SERVICE_USER_ID = 'SERVICE_USER_ID';
@@ -273,6 +274,61 @@ describe('Analytics API', () => {
 					// Analytics Service was NOT called and passed the Local User Id
 
 					expect(identityReceived).to.equal(LOCAL_USER_ID);
+
+					done();
+				}
+			);
+	});
+
+	it('Analytics should get a new userId from the Identity Service if the user identity changed', function(done) {
+		localStorage.setItem(STORAGE_KEY_USER_ID, `"${LOCAL_USER_ID}"`);
+
+		let identityCalled = 0;
+		let identityReceived = '';
+		let identitySent = null;
+		let identityUrl = '';
+
+		fetchMock.mock(
+			/identity/,
+			function(url, opts) {
+				identityCalled += 1;
+				identityUrl = url;
+				identitySent = JSON.parse(opts.body).identity;
+
+				return SERVICE_USER_ID;
+			}
+		);
+
+		fetchMock.mock(
+			'*',
+			function(url, opts) {
+				identityReceived = JSON.parse(opts.body).userId;
+
+				return 200;
+			}
+		);
+
+		Analytics.create(
+			{
+				analyticsKey: ANALYTICS_KEY,
+			}
+		);
+
+		sendDummyEvents();
+
+		Analytics.setIdentity(ANALYTICS_IDENTITY);
+
+		Analytics.flush()
+			.then(
+				() => {
+					// Identity Service WAS called with the user identity
+
+					expect(identityCalled).to.equal(1);
+					ANALYTICS_IDENTITY.should.deep.equal(identitySent)
+
+					// Analytics Service was called and passed the Service User Id
+
+					expect(identityReceived).to.equal(SERVICE_USER_ID);
 
 					done();
 				}
