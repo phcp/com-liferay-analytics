@@ -229,7 +229,7 @@ describe('Analytics API', () => {
 	});
 
 	it('Analytics should use previously stored userIds from the Identity Service', function(done) {
-		localStorage.setItem(STORAGE_KEY_USER_ID, LOCAL_USER_ID)
+		localStorage.setItem(STORAGE_KEY_USER_ID, `"${LOCAL_USER_ID}"`);
 
 		let identityCalled = 0;
 		let identityReceived = '';
@@ -263,8 +263,6 @@ describe('Analytics API', () => {
 
 		sendDummyEvents();
 
-		sinon.stub(window.localStorage.__proto__, 'getItem').callsFake(() => `"${LOCAL_USER_ID}"`);
-
 		Analytics.flush()
 			.then(
 				() => {
@@ -275,8 +273,6 @@ describe('Analytics API', () => {
 					// Analytics Service was NOT called and passed the Local User Id
 
 					expect(identityReceived).to.equal(LOCAL_USER_ID);
-
-					window.localStorage.__proto__.getItem.restore();
 
 					done();
 				}
