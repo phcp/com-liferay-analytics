@@ -79,8 +79,16 @@ Paste this code inside the HTML head:
 ,m=l.getElementsByTagName(o)[0],a.async=1,a.src=u,a.onload=c,
 m.parentNode.insertBefore(a,m)})('https://s3-eu-west-1.amazonaws.com/com-liferay-analytics/analytics-all-min.js', function(){
 
-    Analytics.create({ analyticsKey: 'MyAnalyticsKey', userId: 'id-test-js-client' });
+    Analytics.create({ analyticsKey: 'MyAnalyticsKey' });
     Analytics.send('view', 'Layout', { message: 'This is a test'});
 });
 </script>
+```
+
+The identity of the user generating the events will be automatically determined by the Analytics Client and the Identify Service. 
+However, you can manually provide its identity by calling the `setIdentity` method of the Analytics object: 
+
+```html
+    Analytics.create({ analyticsKey: 'MyAnalyticsKey' });
+    Analytics.setIdentity({ email: 'foo@bar.com', name: 'Foo' });
 ```
