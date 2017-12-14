@@ -85,8 +85,8 @@ m.parentNode.insertBefore(a,m)})('https://s3-eu-west-1.amazonaws.com/com-liferay
 </script>
 ```
 
-The identity of the user generating the events will be automatically determined by the Analytics Client and the Identify Service. 
-However, you can manually provide its identity by calling the `setIdentity` method of the Analytics object: 
+The identity of the user generating the events will be automatically determined by the Analytics Client and the Identify Service.
+However, you can manually provide its identity by calling the `setIdentity` method of the Analytics object:
 
 ```html
     Analytics.create({ analyticsKey: 'MyAnalyticsKey' });
