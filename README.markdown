@@ -80,7 +80,7 @@ Paste this code inside the HTML head:
 m.parentNode.insertBefore(a,m)})('https://s3-eu-west-1.amazonaws.com/com-liferay-analytics/analytics-all-min.js', function(){
 
     Analytics.create({ analyticsKey: 'MyAnalyticsKey' });
-    Analytics.send('view', 'Layout', { message: 'This is a test'});
+    Analytics.send('view', 'Layout');
 });
 </script>
 ```
@@ -92,3 +92,14 @@ However, you can manually provide its identity by calling the `setIdentity` meth
     Analytics.create({ analyticsKey: 'MyAnalyticsKey' });
     Analytics.setIdentity({ email: 'foo@bar.com', name: 'Foo' });
 ```
+
+You can track custom events by invoking the `send` method of the Analytics object. For example: 
+
+```html
+    element.addEventListener('click', function(evt) {
+        Analytics.send('share', 'Blogs', { socialNetwork: 'twitter'});
+    });
+```
+
+The first argument of the `send` method identifies the event (e.g. `share`) and the second identifies the application associated to it (e.g. `Blogs`). 
+Through the third optional argument you can pass some extra information.
