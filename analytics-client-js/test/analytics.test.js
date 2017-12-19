@@ -362,9 +362,9 @@ describe('Analytics API', () => {
 
 					expect(body.analyticsKey).to.equal(ANALYTICS_KEY);
 					expect(body.context).not.to.be.null;
+					expect(body.context.referrer).to.be.a('string');
 					expect(body.events).not.to.be.null;
 					expect(body.protocolVersion).to.be.a('string');
-					expect(body.referrer).to.be.a('string');
 					expect(body.userId).to.be.a('string');
 
 					done();
