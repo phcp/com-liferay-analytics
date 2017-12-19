@@ -53,9 +53,7 @@ class LCSClient {
 	_getRequestBody(analytics, userId) {
 		const requestBody = {
 			analyticsKey: analytics.config.analyticsKey,
-			context: {
-				referrer: document.referrer
-			},
+			context: {},
 			events: analytics.events,
 			protocolVersion: '1.0',
 			userId,
