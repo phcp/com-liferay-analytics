@@ -56,6 +56,7 @@ class LCSClient {
 			context: {},
 			events: analytics.events,
 			protocolVersion: '1.0',
+			referrer: document.referrer,
 			userId,
 		};
 
