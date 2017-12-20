@@ -47,5 +47,41 @@ describe('Analytics MiddleWare Integration', () => {
 				}
 			);
 		});
-	});
+    });
+
+    describe('default middlewares', () => {
+        it('should include document metadata by default', (done) => {
+            let body = null;
+
+            fetchMock.mock(
+                '*',
+                function(url, opts) {
+                    body = JSON.parse(opts.body);
+
+                    return 200;
+                }
+            );
+
+            Analytics.create();
+
+            sendDummyEvents();
+
+            Analytics.flush()
+                .then(
+                    () => {
+						expect(body.context).to.include.all.keys(
+							'description',
+							'keywords',
+							'languageId',
+							'referrer',
+							'title',
+							'url',
+							'userAgent',
+						);
+
+                        done();
+                    }
+                );
+        });
+    });
 });
