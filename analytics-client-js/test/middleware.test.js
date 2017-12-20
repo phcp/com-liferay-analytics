@@ -47,28 +47,28 @@ describe('Analytics MiddleWare Integration', () => {
 				}
 			);
 		});
-    });
+	});
 
-    describe('default middlewares', () => {
-        it('should include document metadata by default', (done) => {
-            let body = null;
+	describe('default middlewares', () => {
+		it('should include document metadata by default', (done) => {
+			let body = null;
 
-            fetchMock.mock(
-                '*',
-                function(url, opts) {
-                    body = JSON.parse(opts.body);
+			fetchMock.mock(
+				'*',
+				function(url, opts) {
+					body = JSON.parse(opts.body);
 
-                    return 200;
-                }
-            );
+					return 200;
+				}
+			);
 
-            Analytics.create();
+			Analytics.create();
 
-            sendDummyEvents();
+			sendDummyEvents();
 
-            Analytics.flush()
-                .then(
-                    () => {
+			Analytics.flush()
+				.then(
+					() => {
 						expect(body.context).to.include.all.keys(
 							'description',
 							'keywords',
@@ -79,9 +79,9 @@ describe('Analytics MiddleWare Integration', () => {
 							'userAgent',
 						);
 
-                        done();
-                    }
-                );
-        });
-    });
+						done();
+					}
+				);
+		});
+	});
 });
