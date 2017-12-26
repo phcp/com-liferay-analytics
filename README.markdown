@@ -13,9 +13,8 @@ provided group: "com.liferay", name: "com.liferay.analytics.data.binding.impl", 
 Usage example:
 
 ```java
-public void sendAnalytics(String applicationKey, String userId) throws Exception {
-    AnalyticsEventsMessage.Builder analyticsEventsMessageBuilder =
-        AnalyticsEventsMessage.builder(applicationKey, userId);
+public void sendAnalytics(String analyticsKey, String userId) throws Exception {
+    AnalyticsEventsMessage.Builder analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(analyticsKey, userId);
 
     analyticsEventsMessageBuilder.contextProperty("languageId", "en_US");
     analyticsEventsMessageBuilder.contextProperty("url", "http://www.liferay.com");
@@ -28,9 +27,36 @@ public void sendAnalytics(String applicationKey, String userId) throws Exception
 
     analyticsEventsMessageBuilder.protocolVersion("1.0");
 
-    AnalyticsClientImpl _analyticsClientImpl = new AnalyticsClientImpl()
+    AnalyticsClientImpl analyticsClientImpl = new AnalyticsClientImpl()
 
-    _analyticsClientImpl.sendAnalytics(analyticsEventsMessageBuilder.build());
+    analyticsClientImpl.sendAnalytics(analyticsEventsMessageBuilder.build());
+}
+```
+
+The `analyticsKey` is an identifier associated to your Liferay account.
+The `userId` is a unique identifier of the user generating the event. You can use the identity service to retrieve a `userId` based on some user context information:
+
+```java
+public void sendAnalytics(String analyticsKey) throws Exception {
+    IdentityContextMessage.Builder identityContextMessageBuilder =
+        IdentityContextMessage.builder(analyticsKey);
+
+    identityContextMessageBuilder.dataSourceIdentifier("Liferay");
+    identityContextMessageBuilder.dataSourceIndividualIdentifier("12345");
+    identityContextMessageBuilder.domain("liferay.com");
+    identityContextMessageBuilder.language("en-US");
+    identityContextMessageBuilder.protocolVersion("1.0");
+
+    identityContextMessageBuilder.identityFieldsProperty("email", "joe.blogss@liferay.com");
+    identityContextMessageBuilder.identityFieldsProperty( "name", "Joe Bloggs");
+
+    IdentityClientImpl identityClientImpl = new IdentityClientImpl();
+
+    String userId = identityClientImpl.getUUID(identityContextMessageBuilder.build());
+
+    AnalyticsEventsMessage.Builder analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(analyticsKey, userId);
+
+    ...
 }
 ```
 
@@ -47,9 +73,9 @@ provided group: "com.liferay", name: "com.liferay.analytics.data.binding.impl", 
 Usage example:
 
 ```java
-public void sendAnalytics(String applicationKey, String userId) throws Exception {
+public void sendAnalytics(String analyticsKey) throws Exception {
     AnalyticsEventsMessage.Builder analyticsEventsMessageBuilder =
-        AnalyticsEventsMessage.builder(applicationKey, userId);
+        AnalyticsEventsMessage.builder(analyticsKey);
 
     analyticsEventsMessageBuilder.contextProperty("languageId", "en_US");
     analyticsEventsMessageBuilder.contextProperty("url", "http://www.liferay.com");
@@ -69,6 +95,38 @@ public void sendAnalytics(String applicationKey, String userId) throws Exception
 private static AnalyticsClient _analyticsClient;
 ```
 
+The `analyticsKey` is an identifier associated to your Liferay account.
+When no `userId` is passed in the message, the analytics client internally resolves the user's identity through the identity service with the default Liferay User Context.
+You can obtain the `userId` with a custom user context by explicitly invoking the identity client service:
+
+```java
+public void sendAnalytics(String analyticsKey) throws Exception {
+    IdentityContextMessage.Builder identityContextMessageBuilder =
+        IdentityContextMessage.builder(analyticsKey);
+
+    identityContextMessageBuilder.dataSourceIdentifier("Liferay");
+    identityContextMessageBuilder.dataSourceIndividualIdentifier("12345");
+    identityContextMessageBuilder.domain("liferay.com");
+    identityContextMessageBuilder.language("en-US");
+    identityContextMessageBuilder.protocolVersion("1.0");
+
+    identityContextMessageBuilder.identityFieldsProperty("email", "joe.blogss@liferay.com");
+    identityContextMessageBuilder.identityFieldsProperty( "name", "Joe Bloggs");
+
+    String userId = _identityClient.getUUID(identityContextMessageBuilder.build());
+
+    AnalyticsEventsMessage.Builder analyticsEventsMessageBuilder = AnalyticsEventsMessage.builder(analyticsKey, userId);
+
+    ...
+}
+
+@Reference
+private static AnalyticsClient _analyticsClient;
+
+@Reference
+private static IdentityClient _identityClient;
+```
+
 ## JS Client
 
 Paste this code inside the HTML head:
@@ -85,6 +143,7 @@ m.parentNode.insertBefore(a,m)})('https://s3-eu-west-1.amazonaws.com/com-liferay
 </script>
 ```
 
+The `analyticsKey` is an identifier associated to your Liferay account.
 The identity of the user generating the events will be automatically determined by the Analytics Client and the Identify Service.
 However, you can manually provide its identity by calling the `setIdentity` method of the Analytics object:
 
