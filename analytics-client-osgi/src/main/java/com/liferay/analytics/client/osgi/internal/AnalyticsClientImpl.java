@@ -62,7 +62,7 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 		if (_log.isDebugEnabled()) {
 			_log.debug(
 				String.format(
-					"Sending analytics message %s to destination %s//%s:%s/%s",
+					"Sending analytics message %s to destination %s//%s:%s%s",
 					jsonAnalyticsEventsMessage, _ANALYTICS_GATEWAY_PROTOCOL,
 					_ANALYTICS_GATEWAY_HOST, _ANALYTICS_GATEWAY_PORT,
 					_ANALYTICS_GATEWAY_PATH));
