@@ -93,7 +93,7 @@ However, you can manually provide its identity by calling the `setIdentity` meth
     Analytics.setIdentity({ email: 'foo@bar.com', name: 'Foo' });
 ```
 
-You can track custom events by invoking the `send` method of the Analytics object. For example: 
+You can track custom events by invoking the `send` method of the Analytics object. For example:
 
 ```html
     element.addEventListener('click', function(evt) {
@@ -101,5 +101,5 @@ You can track custom events by invoking the `send` method of the Analytics objec
     });
 ```
 
-The first argument of the `send` method identifies the event (e.g. `share`) and the second identifies the application associated to it (e.g. `Blogs`). 
+The first argument of the `send` method identifies the event (e.g. `share`) and the second identifies the application associated to it (e.g. `Blogs`).
 Through the third optional argument you can pass some extra information.
