@@ -89,7 +89,10 @@ public class IdentityClientImpl implements IdentityClient {
 		_componentFactory = componentFactory;
 	}
 
-	@Reference(unbind = "-")
+	@Reference(
+		target = "(model=com.liferay.analytics.model.IdentityContextMessage)",
+		unbind = "-"
+	)
 	protected void setJSONObjectMapper(
 		JSONObjectMapper<IdentityContextMessage> jsonObjectMapper) {
 
