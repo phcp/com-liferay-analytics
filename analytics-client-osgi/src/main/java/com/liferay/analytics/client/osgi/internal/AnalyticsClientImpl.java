@@ -79,7 +79,10 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 		_componentFactory = componentFactory;
 	}
 
-	@Reference(unbind = "-")
+	@Reference(
+		target = "(model=com.liferay.analytics.model.AnalyticsEventsMessage)",
+		unbind = "-"
+	)
 	protected void setJSONObjectMapper(
 		JSONObjectMapper<AnalyticsEventsMessage> jsonObjectMapper) {
 
