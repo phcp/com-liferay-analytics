@@ -15,11 +15,19 @@
 package com.liferay.analytics.client.osgi.internal;
 
 import com.liferay.analytics.client.AnalyticsClient;
+import com.liferay.analytics.client.IdentityClient;
 import com.liferay.analytics.data.binding.JSONObjectMapper;
 import com.liferay.analytics.model.AnalyticsEventsMessage;
+import com.liferay.analytics.model.IdentityContextMessage;
 import com.liferay.petra.json.web.service.client.JSONWebServiceClient;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.LocaleThreadLocal;
+import com.liferay.portal.kernel.util.TimeZoneThreadLocal;
 
 import java.util.Dictionary;
 import java.util.Properties;
@@ -56,6 +64,15 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 	public String sendAnalytics(AnalyticsEventsMessage analyticsEventsMessage)
 		throws Exception {
 
+		if (analyticsEventsMessage.getUserId() == null) {
+			AnalyticsEventsMessage.Builder builder =
+				AnalyticsEventsMessage.builder(analyticsEventsMessage);
+
+			String userId = getUserId(analyticsEventsMessage.getAnalyticsKey());
+
+			analyticsEventsMessage = builder.userId(userId).build();
+		}
+
 		String jsonAnalyticsEventsMessage = _jsonObjectMapper.map(
 			analyticsEventsMessage);
 
@@ -72,11 +89,75 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 			_ANALYTICS_GATEWAY_PATH, jsonAnalyticsEventsMessage);
 	}
 
+	protected String getUserId(String analyticsKey) throws Exception {
+		if (IdentityThreadLocal.getUserId() != null) {
+			return IdentityThreadLocal.getUserId();
+		}
+
+		IdentityContextMessage.Builder identityContextMessageBuilder =
+			IdentityContextMessage.builder(analyticsKey);
+
+		identityContextMessageBuilder.protocolVersion("1.0");
+
+		// User Profile
+
+		User user = _userLocalService.fetchUser(
+			PrincipalThreadLocal.getUserId());
+
+		if (user != null) {
+			identityContextMessageBuilder.dataSourceIndividualIdentifier(
+				GetterUtil.getString(user.getUserId()));
+
+			identityContextMessageBuilder.identityFieldsProperty(
+				"email", user.getEmailAddress());
+			identityContextMessageBuilder.identityFieldsProperty(
+				"name", user.getFullName());
+		}
+
+		// User Session Info
+
+		if (LocaleThreadLocal.getThemeDisplayLocale() != null) {
+			identityContextMessageBuilder.language(
+				LocaleThreadLocal.getThemeDisplayLocale().getLanguage());
+		}
+
+		if (TimeZoneThreadLocal.getThemeDisplayTimeZone() != null) {
+			identityContextMessageBuilder.timezone(
+				TimeZoneThreadLocal.getThemeDisplayTimeZone().getDisplayName());
+		}
+
+		// System Info
+
+		String platform = String.format(
+			"%s / %s / %s", System.getProperty("os.name"),
+			System.getProperty("os.version"), System.getProperty("os.arch"));
+
+		identityContextMessageBuilder.platform(platform);
+
+		identityContextMessageBuilder.identityFieldsProperty(
+			"java.version", System.getProperty("java.version"));
+
+		identityContextMessageBuilder.identityFieldsProperty(
+			"user.name", System.getProperty("user.name"));
+
+		String userId = _identityClient.getUUID(
+			identityContextMessageBuilder.build());
+
+		IdentityThreadLocal.setUserId(userId);
+
+		return userId;
+	}
+
 	@Reference(
 		target = "(component.factory=JSONWebServiceClient)", unbind = "-"
 	)
 	protected void setComponentFactory(ComponentFactory componentFactory) {
 		_componentFactory = componentFactory;
+	}
+
+	@Reference(unbind = "-")
+	protected void setIdentityClient(IdentityClient identityClient) {
+		_identityClient = identityClient;
 	}
 
 	@Reference(
@@ -87,6 +168,11 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 		JSONObjectMapper<AnalyticsEventsMessage> jsonObjectMapper) {
 
 		_jsonObjectMapper = jsonObjectMapper;
+	}
+
+	@Reference(unbind = "-")
+	protected void setUserLocalService(UserLocalService userLocalService) {
+		_userLocalService = userLocalService;
 	}
 
 	private static final String _ANALYTICS_GATEWAY_HOST = System.getProperty(
@@ -106,7 +192,9 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 		AnalyticsClientImpl.class);
 
 	private ComponentFactory _componentFactory;
+	private IdentityClient _identityClient;
 	private JSONObjectMapper<AnalyticsEventsMessage> _jsonObjectMapper;
 	private JSONWebServiceClient _jsonWebServiceClient;
+	private UserLocalService _userLocalService;
 
 }
