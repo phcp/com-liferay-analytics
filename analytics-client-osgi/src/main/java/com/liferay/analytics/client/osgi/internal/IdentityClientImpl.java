@@ -54,7 +54,7 @@ public class IdentityClientImpl implements IdentityClient {
 	}
 
 	@Override
-	public String getUUID(IdentityContextMessage identityContextMessage)
+	public String getUserId(IdentityContextMessage identityContextMessage)
 		throws Exception {
 
 		String jsonIdentityContextMessage = _jsonObjectMapper.map(

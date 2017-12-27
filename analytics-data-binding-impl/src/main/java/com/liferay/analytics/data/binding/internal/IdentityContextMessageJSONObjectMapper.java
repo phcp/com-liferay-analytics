@@ -106,9 +106,6 @@ public class IdentityContextMessageJSONObjectMapper
 		@JsonProperty("systemFonts")
 		private String _systemFonts;
 
-		@JsonProperty("temporaryUserID")
-		private String _temporaryUserID;
-
 		@JsonProperty("timezone")
 		private String _timezone;
 
@@ -117,6 +114,9 @@ public class IdentityContextMessageJSONObjectMapper
 
 		@JsonProperty("userAgent")
 		private String _userAgent;
+
+		@JsonProperty("userId")
+		private String _userId;
 
 		@JsonProperty("webGLFingerPrint")
 		private String _webGLFingerPrint;

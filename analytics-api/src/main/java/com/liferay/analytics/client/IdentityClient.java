@@ -24,7 +24,7 @@ import com.liferay.analytics.model.IdentityContextMessage;
 @ProviderType
 public interface IdentityClient {
 
-	public String getUUID(IdentityContextMessage identityContextMessage)
+	public String getUserId(IdentityContextMessage identityContextMessage)
 		throws Exception;
 
 }

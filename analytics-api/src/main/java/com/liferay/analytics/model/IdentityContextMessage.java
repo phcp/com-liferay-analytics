@@ -81,16 +81,16 @@ public final class IdentityContextMessage implements Serializable {
 		return _systemFonts;
 	}
 
-	public String getTemporaryUserID() {
-		return _temporaryUserID;
-	}
-
 	public String getTimezone() {
 		return _timezone;
 	}
 
 	public String getUserAgent() {
 		return _userAgent;
+	}
+
+	public String getUserId() {
+		return _userId;
 	}
 
 	public String getWebGLFingerPrint() {
@@ -198,12 +198,6 @@ public final class IdentityContextMessage implements Serializable {
 			return this;
 		}
 
-		public Builder temporaryUserID(String temporaryUserID) {
-			_identityMessage._temporaryUserID = temporaryUserID;
-
-			return this;
-		}
-
 		public Builder timezone(String timezone) {
 			_identityMessage._timezone = timezone;
 
@@ -218,6 +212,12 @@ public final class IdentityContextMessage implements Serializable {
 
 		public Builder userAgent(String userAgent) {
 			_identityMessage._userAgent = userAgent;
+
+			return this;
+		}
+
+		public Builder userId(String temporaryUserID) {
+			_identityMessage._userId = temporaryUserID;
 
 			return this;
 		}
@@ -254,10 +254,10 @@ public final class IdentityContextMessage implements Serializable {
 	private String _protocolVersion;
 	private String _screenSizeAndColorDepth;
 	private String _systemFonts;
-	private String _temporaryUserID;
 	private String _timezone;
 	private boolean _touchSupport;
 	private String _userAgent;
+	private String _userId;
 	private String _webGLFingerPrint;
 
 }

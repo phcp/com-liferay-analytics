@@ -65,10 +65,10 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 		throws Exception {
 
 		if (analyticsEventsMessage.getUserId() == null) {
+			String userId = getUserId(analyticsEventsMessage.getAnalyticsKey());
+
 			AnalyticsEventsMessage.Builder builder =
 				AnalyticsEventsMessage.builder(analyticsEventsMessage);
-
-			String userId = getUserId(analyticsEventsMessage.getAnalyticsKey());
 
 			analyticsEventsMessage = builder.userId(userId).build();
 		}
@@ -126,21 +126,7 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 				TimeZoneThreadLocal.getThemeDisplayTimeZone().getDisplayName());
 		}
 
-		// System Info
-
-		String platform = String.format(
-			"%s / %s / %s", System.getProperty("os.name"),
-			System.getProperty("os.version"), System.getProperty("os.arch"));
-
-		identityContextMessageBuilder.platform(platform);
-
-		identityContextMessageBuilder.identityFieldsProperty(
-			"java.version", System.getProperty("java.version"));
-
-		identityContextMessageBuilder.identityFieldsProperty(
-			"user.name", System.getProperty("user.name"));
-
-		String userId = _identityClient.getUUID(
+		String userId = _identityClient.getUserId(
 			identityContextMessageBuilder.build());
 
 		IdentityThreadLocal.setUserId(userId);
