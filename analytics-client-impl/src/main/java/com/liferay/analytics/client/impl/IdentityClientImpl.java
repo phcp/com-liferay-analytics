@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public class IdentityClientImpl implements IdentityClient {
 
-	public String getUUID(IdentityContextMessage identityContextMessage)
+	public String getUserId(IdentityContextMessage identityContextMessage)
 		throws Exception {
 
 		String jsonIdentityContextMessage = _jsonObjectMapper.map(
@@ -41,11 +41,9 @@ public class IdentityClientImpl implements IdentityClient {
 
 		if (_logger.isDebugEnabled()) {
 			_logger.debug(
-				String.format(
-					"Sending identity request %s to destination %s//%s:%s%s",
-					jsonIdentityContextMessage, _IDENTITY_GATEWAY_PROTOCOL,
-					_IDENTITY_GATEWAY_HOST, _IDENTITY_GATEWAY_PORT,
-					identityPath));
+				"Sending identity request {} to destination {}//{}:{}{}",
+				jsonIdentityContextMessage, _IDENTITY_GATEWAY_PROTOCOL,
+				_IDENTITY_GATEWAY_HOST, _IDENTITY_GATEWAY_PORT, identityPath);
 		}
 
 		_jsonWebServiceClient.setHostName(_IDENTITY_GATEWAY_HOST);

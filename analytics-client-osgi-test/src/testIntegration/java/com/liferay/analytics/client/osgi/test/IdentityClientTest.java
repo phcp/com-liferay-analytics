@@ -56,7 +56,7 @@ public class IdentityClientTest {
 		identityContextMessageBuilder.identityFieldsProperty(
 			"name", "Julio Camarero");
 
-		String response = _identityClient.getUUID(
+		String response = _identityClient.getUserId(
 			identityContextMessageBuilder.build());
 
 		Assert.assertNotNull(response);

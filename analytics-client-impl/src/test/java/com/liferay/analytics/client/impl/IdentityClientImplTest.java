@@ -42,7 +42,7 @@ public class IdentityClientImplTest {
 		identityContextMessageBuilder.identityFieldsProperty(
 			"name", "Julio Camarero");
 
-		String response = _identityClientImpl.getUUID(
+		String response = _identityClientImpl.getUserId(
 			identityContextMessageBuilder.build());
 
 		Assert.assertNotNull(response);
