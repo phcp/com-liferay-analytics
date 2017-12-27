@@ -56,6 +56,8 @@
 				analyticsKey: 'MyAnalyticsKey'
 			});
 
+			Analytics.setIdentity({ email: 'foo@bar.com', name: 'Foo' });
+
 			Analytics.send('view', 'Layout', { message: 'This is a test'});
 
 			document.body.addEventListener('click', function(evt) {
