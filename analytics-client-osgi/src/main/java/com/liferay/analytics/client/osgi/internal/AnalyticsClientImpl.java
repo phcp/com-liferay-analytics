@@ -99,7 +99,7 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 
 		identityContextMessageBuilder.protocolVersion("1.0");
 
-		// User Profile
+		// User profile
 
 		User user = _userLocalService.fetchUser(
 			PrincipalThreadLocal.getUserId());
@@ -114,7 +114,7 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 				"name", user.getFullName());
 		}
 
-		// User Session Info
+		// User session info
 
 		if (LocaleThreadLocal.getThemeDisplayLocale() != null) {
 			identityContextMessageBuilder.language(
