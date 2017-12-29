@@ -27,7 +27,7 @@ public class IdentityThreadLocal {
 		String userId = _userId.get();
 
 		if (_log.isDebugEnabled()) {
-			_log.debug("getUserId " + userId);
+			_log.debug("Get user ID " + userId);
 		}
 
 		return userId;
@@ -35,7 +35,7 @@ public class IdentityThreadLocal {
 
 	public static void setUserId(String userId) {
 		if (_log.isDebugEnabled()) {
-			_log.debug("setUserId " + userId);
+			_log.debug("Set user ID " + userId);
 		}
 
 		_userId.set(userId);
