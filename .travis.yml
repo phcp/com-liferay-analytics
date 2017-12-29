@@ -8,6 +8,7 @@ script:
 deploy:
     access_key_id: $AWS_ACCESS_KEY_ID
     bucket: $AWS_S3_BUCKET_NAME
+    endpoint: $AWS_S3_BUCKET_ENDPOINT
     local_dir: analytics-client-js/build
     on:
         branch: release
