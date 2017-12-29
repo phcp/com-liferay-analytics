@@ -13,5 +13,6 @@ deploy:
     on:
         branch: release
     provider: s3
+    region: $AWS_S3_BUCKET_REGION
     secret_access_key: $AWS_ACCESS_SECRET_KEY
     skip_cleanup: true
