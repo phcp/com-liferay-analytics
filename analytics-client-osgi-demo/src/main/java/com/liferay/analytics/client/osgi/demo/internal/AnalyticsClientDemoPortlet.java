@@ -67,7 +67,7 @@ public class AnalyticsClientDemoPortlet extends MVCPortlet {
 				analyticsEventsMessageBuilder.build());
 		}
 		catch (Exception e) {
-			_log.error("Error sending analytics", e);
+			_log.error("Unable to send analytics", e);
 		}
 	}
 
