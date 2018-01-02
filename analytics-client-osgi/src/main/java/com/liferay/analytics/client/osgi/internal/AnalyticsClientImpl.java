@@ -51,9 +51,9 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 	public void activate() {
 		Properties properties = new Properties();
 
-		properties.setProperty("hostName", _ANALYTICS_GATEWAY_HOST);
-		properties.setProperty("hostPort", _ANALYTICS_GATEWAY_PORT);
-		properties.setProperty("protocol", _ANALYTICS_GATEWAY_PROTOCOL);
+		properties.setProperty("hostName", _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_HOST);
+		properties.setProperty("hostPort", _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PORT);
+		properties.setProperty("protocol", _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PROTOCOL);
 
 		ComponentInstance componentInstance = _componentFactory.newInstance(
 			(Dictionary)properties);
@@ -83,23 +83,23 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 			_log.debug(
 				String.format(
 					"Sending analytics message %s to destination %s//%s:%s%s",
-					jsonAnalyticsEventsMessage, _ANALYTICS_GATEWAY_PROTOCOL,
-					_ANALYTICS_GATEWAY_HOST, _ANALYTICS_GATEWAY_PORT,
-					_ANALYTICS_GATEWAY_PATH));
+					jsonAnalyticsEventsMessage, _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PROTOCOL,
+					_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_HOST, _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PORT,
+					_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PATH));
 		}
 
 		return _jsonWebServiceClient.doPostAsJSON(
-			_ANALYTICS_GATEWAY_PATH, jsonAnalyticsEventsMessage);
+			_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PATH, jsonAnalyticsEventsMessage);
 	}
 
 	protected String getUserId(String analyticsKey) throws Exception {
 		HttpSession session = PortalSessionThreadLocal.getHttpSession();
 
 		if ((session != null) &&
-			(session.getAttribute(_ANALYTICS_USER_ID_ATTRIBUTE_NAME) != null)) {
+			(session.getAttribute(_REQUEST_ATTRIBUTE_NAME_ANALYTICS_USER_ID) != null)) {
 
 			return (String)session.getAttribute(
-				_ANALYTICS_USER_ID_ATTRIBUTE_NAME);
+				_REQUEST_ATTRIBUTE_NAME_ANALYTICS_USER_ID);
 		}
 
 		IdentityContextMessage.Builder identityContextMessageBuilder =
@@ -138,7 +138,7 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 			identityContextMessageBuilder.build());
 
 		if (session != null) {
-			session.setAttribute(_ANALYTICS_USER_ID_ATTRIBUTE_NAME, userId);
+			session.setAttribute(_REQUEST_ATTRIBUTE_NAME_ANALYTICS_USER_ID, userId);
 		}
 
 		return userId;
@@ -171,20 +171,20 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 		_userLocalService = userLocalService;
 	}
 
-	private static final String _ANALYTICS_GATEWAY_HOST = System.getProperty(
+	private static final String _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_HOST = System.getProperty(
 		"analytics.gateway.host", "ec-dev.liferay.com");
 
-	private static final String _ANALYTICS_GATEWAY_PATH = System.getProperty(
+	private static final String _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PATH = System.getProperty(
 		"analytics.gateway.path",
 		"/api/analyticsgateway/send-analytics-events");
 
-	private static final String _ANALYTICS_GATEWAY_PORT = System.getProperty(
+	private static final String _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PORT = System.getProperty(
 		"analytics.gateway.port", "8095");
 
-	private static final String _ANALYTICS_GATEWAY_PROTOCOL =
+	private static final String _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PROTOCOL =
 		System.getProperty("analytics.gateway.protocol", "https");
 
-	private static final String _ANALYTICS_USER_ID_ATTRIBUTE_NAME =
+	private static final String _REQUEST_ATTRIBUTE_NAME_ANALYTICS_USER_ID =
 		"ANALYTICS_USER_ID";
 
 	private static final Log _log = LogFactoryUtil.getLog(
