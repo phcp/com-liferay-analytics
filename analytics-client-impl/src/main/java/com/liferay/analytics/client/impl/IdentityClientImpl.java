@@ -37,35 +37,41 @@ public class IdentityClientImpl implements IdentityClient {
 
 		String identityPath = String.format(
 			"/%s%s", identityContextMessage.getAnalyticsKey(),
-			_IDENTITY_GATEWAY_PATH);
+			_SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_PATH);
 
 		if (_logger.isDebugEnabled()) {
 			_logger.debug(
 				"Sending identity request {} to destination {}//{}:{}{}",
-				jsonIdentityContextMessage, _IDENTITY_GATEWAY_PROTOCOL,
-				_IDENTITY_GATEWAY_HOST, _IDENTITY_GATEWAY_PORT, identityPath);
+				jsonIdentityContextMessage,
+				_SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_PROTOCOL,
+				_SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_HOST,
+				_SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_PORT, identityPath);
 		}
 
-		_jsonWebServiceClient.setHostName(_IDENTITY_GATEWAY_HOST);
+		_jsonWebServiceClient.setHostName(
+			_SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_HOST);
 		_jsonWebServiceClient.setHostPort(
-			Integer.parseInt(_IDENTITY_GATEWAY_PORT));
-		_jsonWebServiceClient.setProtocol(_IDENTITY_GATEWAY_PROTOCOL);
+			Integer.parseInt(_SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_PORT));
+		_jsonWebServiceClient.setProtocol(
+			_SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_PROTOCOL);
 
 		return _jsonWebServiceClient.doPostAsJSON(
 			identityPath, jsonIdentityContextMessage);
 	}
 
-	private static final String _IDENTITY_GATEWAY_HOST = System.getProperty(
-		"identity.gateway.host", "contacts-prod.liferay.com");
+	private static final String _SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_HOST =
+		System.getProperty(
+			"identity.gateway.host", "contacts-prod.liferay.com");
 
-	private static final String _IDENTITY_GATEWAY_PATH = System.getProperty(
-		"identity.gateway.path", "/identity");
+	private static final String _SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_PATH =
+		System.getProperty("identity.gateway.path", "/identity");
 
-	private static final String _IDENTITY_GATEWAY_PORT = System.getProperty(
-		"identity.gateway.port", "443");
+	private static final String _SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_PORT =
+		System.getProperty("identity.gateway.port", "443");
 
-	private static final String _IDENTITY_GATEWAY_PROTOCOL = System.getProperty(
-		"identity.gateway.protocol", "https");
+	private static final String
+		_SYSTEM_PROPERTY_VALUE_IDENTITY_GATEWAY_PROTOCOL = System.getProperty(
+			"identity.gateway.protocol", "https");
 
 	private static final Logger _logger = LoggerFactory.getLogger(
 		IdentityClientImpl.class);

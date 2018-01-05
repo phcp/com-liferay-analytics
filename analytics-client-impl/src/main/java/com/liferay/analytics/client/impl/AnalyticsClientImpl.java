@@ -39,32 +39,39 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 			_logger.debug(
 				String.format(
 					"Sending analytics message %s to destination %s//%s:%s%s",
-					jsonAnalyticsEventsMessage, _ANALYTICS_GATEWAY_PROTOCOL,
-					_ANALYTICS_GATEWAY_HOST, _ANALYTICS_GATEWAY_PORT,
-					_ANALYTICS_GATEWAY_PATH));
+					jsonAnalyticsEventsMessage,
+					_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PROTOCOL,
+					_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_HOST,
+					_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PORT,
+					_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PATH));
 		}
 
-		_jsonWebServiceClient.setHostName(_ANALYTICS_GATEWAY_HOST);
+		_jsonWebServiceClient.setHostName(
+			_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_HOST);
 		_jsonWebServiceClient.setHostPort(
-			Integer.parseInt(_ANALYTICS_GATEWAY_PORT));
-		_jsonWebServiceClient.setProtocol(_ANALYTICS_GATEWAY_PROTOCOL);
+			Integer.parseInt(_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PORT));
+		_jsonWebServiceClient.setProtocol(
+			_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PROTOCOL);
 
 		return _jsonWebServiceClient.doPostAsJSON(
-			_ANALYTICS_GATEWAY_PATH, jsonAnalyticsEventsMessage);
+			_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PATH,
+			jsonAnalyticsEventsMessage);
 	}
 
-	private static final String _ANALYTICS_GATEWAY_HOST = System.getProperty(
-		"analytics.gateway.host", "ec-dev.liferay.com");
+	private static final String _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_HOST =
+		System.getProperty("analytics.gateway.host", "ec-dev.liferay.com");
 
-	private static final String _ANALYTICS_GATEWAY_PATH = System.getProperty(
-		"analytics.gateway.path",
-		"/api/analyticsgateway/send-analytics-events");
+	private static final String _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PATH =
+		System.getProperty(
+			"analytics.gateway.path",
+			"/api/analyticsgateway/send-analytics-events");
 
-	private static final String _ANALYTICS_GATEWAY_PORT = System.getProperty(
-		"analytics.gateway.port", "8095");
+	private static final String _SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PORT =
+		System.getProperty("analytics.gateway.port", "8095");
 
-	private static final String _ANALYTICS_GATEWAY_PROTOCOL =
-		System.getProperty("analytics.gateway.protocol", "https");
+	private static final String
+		_SYSTEM_PROPERTY_VALUE_ANALYTICS_GATEWAY_PROTOCOL = System.getProperty(
+			"analytics.gateway.protocol", "https");
 
 	private static final Logger _logger = LoggerFactory.getLogger(
 		AnalyticsClientImpl.class);
