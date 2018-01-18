@@ -31,7 +31,9 @@ import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.TimeZoneThreadLocal;
 
 import java.util.Dictionary;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpSession;
 
@@ -131,14 +133,16 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 
 		// User session info
 
-		if (LocaleThreadLocal.getThemeDisplayLocale() != null) {
-			identityContextMessageBuilder.language(
-				LocaleThreadLocal.getThemeDisplayLocale().getLanguage());
+		Locale locale = LocaleThreadLocal.getThemeDisplayLocale();
+
+		if (locale != null) {
+			identityContextMessageBuilder.language(locale.getLanguage());
 		}
 
-		if (TimeZoneThreadLocal.getThemeDisplayTimeZone() != null) {
-			identityContextMessageBuilder.timezone(
-				TimeZoneThreadLocal.getThemeDisplayTimeZone().getDisplayName());
+		TimeZone timeZone = TimeZoneThreadLocal.getThemeDisplayTimeZone();
+
+		if (timeZone != null) {
+			identityContextMessageBuilder.timezone(timeZone.getDisplayName());
 		}
 
 		String userId = _identityClient.getUserId(
