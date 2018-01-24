@@ -71,12 +71,12 @@ public class IdentityContextMessageJSONObjectMapperTest {
 		identityContextMessageBuilder.identityFieldsProperty(
 			"name", "Julio Camarero");
 
-		String actualJSONString = _jsonObjectMapper.map(
+		String actualJSON = _jsonObjectMapper.map(
 			identityContextMessageBuilder.build());
 
-		String expectedJSONString = read("identity_context_message.json");
+		String expectedJSON = read("identity_context_message.json");
 
-		JSONAssert.assertEquals(expectedJSONString, actualJSONString, false);
+		JSONAssert.assertEquals(expectedJSON, actualJSON, false);
 	}
 
 	protected String read(String fileName) throws Exception {

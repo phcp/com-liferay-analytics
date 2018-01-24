@@ -97,15 +97,15 @@ public class AnalyticsEventsMessageJSONObjectMapperTest {
 
 		messageBuilder.protocolVersion("1.0");
 
-		String expectedJSONString = read("analytics_events_message.json");
+		String expectedJSON = read("analytics_events_message.json");
 
-		expectedJSONString = expectedJSONString.replace(
+		expectedJSON = expectedJSON.replace(
 			"2017-11-20T19:52:56.723Z",
 			ISO8601Utils.format(event.getEventDate(), true));
 
-		String actualJSONString = _jsonObjectMapper.map(messageBuilder.build());
+		String actualJSON = _jsonObjectMapper.map(messageBuilder.build());
 
-		JSONAssert.assertEquals(expectedJSONString, actualJSONString, false);
+		JSONAssert.assertEquals(expectedJSON, actualJSON, false);
 	}
 
 	protected String read(String fileName) throws Exception {
