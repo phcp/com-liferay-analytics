@@ -4,7 +4,7 @@
  * @return {object} Either form id, name or action.
  */
 function getFormKey(form) {
-	return form.dataset.formId || form.id || form.getAttribute('name') || form.action;
+	return form.dataset.analyticsFormId || form.id || form.getAttribute('name') || form.action;
 }
 
 /**
@@ -29,6 +29,15 @@ function getFormPayload(form) {
 }
 
 /**
+ * Wether a form is trackable or not.
+ * @param {object} form The form DOM element
+ * @return {boolean} True if the form is trackable.
+ */
+function isTrackableForm(form) {
+	return ('analytics' in form.dataset) && !!getFormKey(form);
+}
+
+/**
  * Adds an event listener for the blur event and sends analytics information
  * when that event happens.
  * @param {object} The Analytics client instance
@@ -37,7 +46,9 @@ function trackFieldBlurred(analytics) {
 	document.addEventListener(
 		'blur',
 		({target}) => {
-			if (!target.form) return;
+			const {form} = target;
+
+			if (!form || !isTrackableForm(form)) return;
 
 			const payload = getFieldPayload(target);
 
@@ -71,7 +82,9 @@ function trackFieldFocused(analytics) {
 	document.addEventListener(
 		'focus',
 		({target}) => {
-			if (!target.form) return;
+			const {form} = target;
+
+			if (!form || !isTrackableForm(form)) return;
 
 			const payload = getFieldPayload(target);
 
@@ -97,6 +110,8 @@ function trackFormSubmitted(analytics) {
 	document.addEventListener(
 		'submit',
 		({target}) => {
+			if (!isTrackableForm(target)) return;
+
 			analytics.send(
 				'formSubmitted',
 				'forms',
@@ -114,6 +129,7 @@ function trackFormSubmitted(analytics) {
 function trackFormViewed(analytics) {
 	window.addEventListener('load', () => {
 		Array.prototype.slice.call(document.querySelectorAll('form'))
+		.filter(form => isTrackableForm(form))
 		.forEach((form) => {
 			analytics.send(
 				'formViewed',

@@ -8,6 +8,7 @@ describe('Forms Plugin', () => {
 			Analytics.create();
 
 			const form = document.createElement('form');
+			form.dataset.analytics = 'true';
 			form.id = 'myId';
 			document.body.appendChild(form);
 
@@ -35,6 +36,7 @@ describe('Forms Plugin', () => {
 			Analytics.create();
 
 			const form = document.createElement('form');
+			form.dataset.analytics = 'true';
 			form.id = 'myId';
 			document.body.appendChild(form);
 			form.addEventListener('submit', event => event.preventDefault());
@@ -65,6 +67,7 @@ describe('Forms Plugin', () => {
 			Analytics.create();
 
 			const form = document.createElement('form');
+			form.dataset.analytics = 'true';
 			form.id = 'myId';
 			document.body.appendChild(form);
 			const field = document.createElement('input');
@@ -96,6 +99,7 @@ describe('Forms Plugin', () => {
 			Analytics.create();
 
 			const form = document.createElement('form');
+			form.dataset.analytics = 'true';
 			form.id = 'myId';
 			document.body.appendChild(form);
 			const field = document.createElement('input');
