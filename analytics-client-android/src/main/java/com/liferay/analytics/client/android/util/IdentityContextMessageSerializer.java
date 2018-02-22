@@ -15,9 +15,11 @@
 package com.liferay.analytics.client.android.util;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
-import com.liferay.analytics.model.AnalyticsEventsMessage;
+import com.liferay.analytics.client.android.transport.IdentityContextMessageModel;
 import com.liferay.analytics.model.IdentityContextMessage;
 
 import java.lang.reflect.Type;
@@ -26,34 +28,20 @@ import java.lang.reflect.Type;
  * @author Igor Matos
  * @author Allan Melo
  */
-public class JSONParser {
+public class IdentityContextMessageSerializer
+	implements JsonSerializer<IdentityContextMessage> {
 
-	public static <T> T fromJsonString(String json, Type type)
-		throws Exception {
+	@Override
+	public JsonElement serialize(
+		IdentityContextMessage identityContextMessage, Type typeOfSrc,
+		JsonSerializationContext context) {
 
-		return gson().fromJson(json, type);
+		IdentityContextMessageModel model = new IdentityContextMessageModel(
+			identityContextMessage);
+
+		Gson gson = JSONParser.gson();
+
+		return gson.toJsonTree(model);
 	}
-
-	public static String toJSON(Object element) {
-		return gson().toJson(element);
-	}
-
-	protected static synchronized Gson gson() {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-
-		gsonBuilder.setDateFormat(_DATE_FORMAT);
-
-		gsonBuilder.registerTypeAdapter(
-			AnalyticsEventsMessage.class,
-			new AnalyticsEventsMessageSerializer());
-
-		gsonBuilder.registerTypeAdapter(
-			IdentityContextMessage.class,
-			new IdentityContextMessageSerializer());
-
-		return gsonBuilder.create();
-	}
-
-	private static final String _DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 }
