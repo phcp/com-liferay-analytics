@@ -27,7 +27,7 @@ import org.junit.Test;
 public class IdentityClientImplTest {
 
 	@Test
-	public void getUserId() throws Exception {
+	public void testGetUserId() throws Exception {
 		IdentityContextMessage.Builder identityContextMessageBuilder =
 			IdentityContextMessage.builder("liferay.com");
 
@@ -37,15 +37,17 @@ public class IdentityClientImplTest {
 		identityContextMessageBuilder.language("en-US");
 		identityContextMessageBuilder.protocolVersion("1.0");
 
-		identityContextMessageBuilder.identityFieldsProperty("email", "joe.blogss@liferay.com");
-		identityContextMessageBuilder.identityFieldsProperty( "name", "Joe Bloggs");
+		identityContextMessageBuilder.identityFieldsProperty(
+			"email", "joe.blogs@liferay.com");
+		identityContextMessageBuilder.identityFieldsProperty(
+			"name", "Joe Bloggs");
 
 		IdentityClientImpl identityClientImpl = new IdentityClientImpl();
 
-		String userId = identityClientImpl.getUserId(identityContextMessageBuilder.build());
+		String userId = identityClientImpl.getUserId(
+			identityContextMessageBuilder.build());
 
 		Assert.assertTrue(userId != null && userId.length() > 1);
 	}
-
 
 }
