@@ -29,7 +29,7 @@ allprojects {
 }
 
 formatSource {
-    baseDirName = "src/main"
+    baseDirName = "src"
 }
 
 android {
@@ -48,6 +48,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -63,7 +64,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
 
-    implementation(group: 'com.liferay', name: "com.liferay.analytics.api", version: "1.0.0-20180201.051150-2")
+    implementation(group: 'com.liferay', name: "com.liferay.analytics.api", version: "1.0.0-20180201.051150-2"){transitive=true}
     implementation(group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "2.3.83")
 
 }

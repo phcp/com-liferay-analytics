@@ -38,6 +38,7 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 		throws Exception {
 
 		String json = JSONParser.toJSON(analyticsEventsMessage);
+
 		String analyticsPath = String.format(
 			"%s://%s:%s%s", getAnalyticsGatewayProtocol(),
 			getAnalyticsGatewayHost(), getAnalyticsGatewayPort(),
@@ -92,6 +93,6 @@ public class AnalyticsClientImpl implements AnalyticsClient {
 	private static final MediaType _MEDIA_TYPE = MediaType.parse(
 		"application/json; charset=utf-8");
 
-	private OkHttpClient _client = new OkHttpClient();
+	private final OkHttpClient _client = new OkHttpClient();
 
 }

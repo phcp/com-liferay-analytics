@@ -93,6 +93,6 @@ public class IdentityClientImpl implements IdentityClient {
 	private static final MediaType _MEDIA_TYPE = MediaType.parse(
 		"application/json; charset=utf-8");
 
-	private OkHttpClient _client = new OkHttpClient();
+	private final OkHttpClient _client = new OkHttpClient();
 
 }
