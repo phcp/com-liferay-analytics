@@ -1,70 +1,69 @@
-apply plugin: 'com.android.library'
-apply plugin: "com.liferay.source.formatter"
-
-
 buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
+	repositories {
+		jcenter()
+		maven {
+			url 'https://maven.google.com/'
+			name 'Google'
+		}
 
-    }
-    dependencies {
-        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "latest.release"
-        classpath 'com.android.tools.build:gradle:3.0.1'
-    }
+	}
+	dependencies {
+		classpath group: "com.android.tools.build", name: "gradle", version: "3.0.1"
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "latest.release"
+	}
 }
 
-allprojects {
-    repositories {
-        jcenter()
-        google()
+apply plugin: "com.liferay.source.formatter"
+apply plugin: 'com.android.library'
 
-        maven {
-            url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
-        }
-    }
+allprojects {
+	repositories {
+		jcenter()
+		google()
+
+		maven {
+			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+	}
 }
 
 formatSource {
-    baseDirName = "src"
+	baseDirName = "src"
 }
 
 android {
-    compileSdkVersion 26
+	compileSdkVersion 26
 
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+	defaultConfig {
+		minSdkVersion 14
+		targetSdkVersion 26
+		versionCode 1
+		versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-    }
+	}
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            useProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+	buildTypes {
+		release {
+			minifyEnabled false
+			useProguard false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
 
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:2.15.0"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+	testImplementation 'junit:junit:4.12'
+	testImplementation "org.mockito:mockito-core:2.15.0"
+	implementation 'com.android.support:appcompat-v7:26.1.0'
+	implementation 'com.google.code.gson:gson:2.8.2'
+	implementation 'com.squareup.okhttp3:okhttp:3.9.1'
 
-    implementation(group: 'com.liferay', name: "com.liferay.analytics.api", version: "1.0.0-20180201.051150-2"){transitive=true}
-    implementation(group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "2.3.83")
+	implementation(group: 'com.liferay', name: "com.liferay.analytics.api", version: "1.0.0-20180201.051150-2"){transitive=true}
+	implementation(group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "2.3.83")
 
 }

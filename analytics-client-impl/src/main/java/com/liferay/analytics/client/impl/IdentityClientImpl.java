@@ -20,6 +20,7 @@ import com.liferay.analytics.data.binding.internal.IdentityContextMessageJSONObj
 import com.liferay.analytics.model.IdentityContextMessage;
 import com.liferay.petra.json.web.service.client.JSONWebServiceClient;
 import com.liferay.petra.json.web.service.client.internal.JSONWebServiceClientImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
