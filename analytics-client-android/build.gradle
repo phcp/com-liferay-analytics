@@ -10,6 +10,8 @@ buildscript {
 	dependencies {
 		classpath group: "com.android.tools.build", name: "gradle", version: "3.0.1"
 		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "latest.release"
+		classpath group: "com.jfrog.bintray.gradle", name: "gradle-bintray-plugin", version: "1.8.0"
+		classpath group: "com.github.dcendents", name: "android-maven-gradle-plugin", version: "2.0"
 	}
 }
 
@@ -54,6 +56,26 @@ android {
 
 }
 
+ext {
+	publishedGroupId = 'com.liferay.analytics.client.android'
+	libraryName = 'analytics-client-android'
+	libraryDescription = 'Liferay Analytics client for Android'
+
+	bintrayRepo = 'liferay-mobile'
+	bintrayOrg = ''
+	//bintrayOrg = 'liferay'
+
+	versionCode = 100
+	versionName = '1.0.0'
+
+	siteUrl = 'https://github.com/liferay/com-liferay-analytics'
+	gitUrl = 'https://github.com/liferay/com-liferay-analytics.git'
+
+	licenseName = 'GNU Lesser General Public License, version 2.1'
+	licenseUrl = 'http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html'
+	allLicenses = ["LGPL-2.1"]
+}
+
 dependencies {
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -67,3 +89,6 @@ dependencies {
 	implementation(group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "2.3.83")
 
 }
+
+apply from: './bintray.gradle'
+apply from: './install.gradle'
