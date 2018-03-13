@@ -22,10 +22,6 @@ allprojects {
 	repositories {
 		jcenter()
 		google()
-
-		maven {
-			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
-		}
 	}
 }
 
@@ -57,8 +53,8 @@ android {
 }
 
 ext {
-	publishedGroupId = 'com.liferay.analytics.client.android'
-	libraryName = 'analytics-client-android'
+	publishedGroupId = 'com.liferay'
+	libraryName = 'com.liferay.analytics.client.android'
 	libraryDescription = 'Liferay Analytics client for Android'
 
 	bintrayRepo = 'liferay-mobile'
@@ -84,7 +80,7 @@ dependencies {
 	implementation 'com.google.code.gson:gson:2.8.2'
 	implementation 'com.squareup.okhttp3:okhttp:3.9.1'
 
-	implementation(group: 'com.liferay', name: "com.liferay.analytics.api", version: "1.0.0-20180201.051150-2"){transitive=true}
+	implementation(group: 'com.liferay', name: "com.liferay.analytics.api", version: "1.0.0")
 	implementation(group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "2.3.83")
 
 }
