@@ -21,3 +21,6 @@ test-results/
 tmp/
 local.properties
 analytics-client-android/build/
+analytics-client-ios/Pods/
+analytics-client-ios/com-liferay-analytics-client.xcworkspace
+analytics-client-ios/com-liferay-analytics-client.xcodeproj/xcuserdata/
