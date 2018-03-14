@@ -14,12 +14,6 @@ allprojects {
 	repositories {
 		google()
 		jcenter()
-		maven {
-			url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
-		}
-		flatDir {
-			dirs '../../analytics-client-android/build/outputs/aar'
-		}
 	}
 }
 
