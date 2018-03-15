@@ -24,3 +24,6 @@ analytics-client-android/build/
 analytics-client-ios/Pods/
 analytics-client-ios/com-liferay-analytics-client.xcworkspace
 analytics-client-ios/com-liferay-analytics-client.xcodeproj/xcuserdata/
+analytics-client-ios-demo/Pods/
+analytics-client-ios-demo/analytics-client-ios-demo.xcworkspace
+analytics-client-ios-demo/analytics-client-ios-demo.xcodeproj/xcuserdata/
