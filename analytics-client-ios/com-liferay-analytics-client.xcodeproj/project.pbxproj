@@ -10,8 +10,10 @@
 		172DC103BFF255BE0D9AACA1 /* libPods-com-liferay-analytics-client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 133661E889073C7C76C657FD /* libPods-com-liferay-analytics-client.a */; };
 		4A3359DD2056B99000BAB411 /* libcom-liferay-analytics-client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9AFF2320502E4800DC7258 /* libcom-liferay-analytics-client.a */; };
 		4A33A730205179D80022628B /* AnalyticsEventsMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33A72F205179D80022628B /* AnalyticsEventsMessage.swift */; };
+		4AC6339B205806FD005BBE45 /* IdentityContextMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC6339A205806FD005BBE45 /* IdentityContextMessage.swift */; };
 		4AC633A5205838A7005BBE45 /* AnalyticsEventsMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33A72F205179D80022628B /* AnalyticsEventsMessage.swift */; };
 		4AC633A7205838AD005BBE45 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33A73220517D710022628B /* Event.swift */; };
+		4AC633A8205838B0005BBE45 /* IdentityContextMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC6339A205806FD005BBE45 /* IdentityContextMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,7 @@
 		4A33A72F205179D80022628B /* AnalyticsEventsMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEventsMessage.swift; sourceTree = "<group>"; };
 		4A33A73220517D710022628B /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		4A9AFF2320502E4800DC7258 /* libcom-liferay-analytics-client.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcom-liferay-analytics-client.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AC6339A205806FD005BBE45 /* IdentityContextMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityContextMessage.swift; sourceTree = "<group>"; };
 		4AC828512052BD2700FE5DF4 /* com-liferay-analytics-client-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "com-liferay-analytics-client-Bridging-Header.h"; sourceTree = "<group>"; };
 		9BB998709AFCA6CE66950979 /* Pods-com-liferay-analytics-client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-com-liferay-analytics-client.debug.xcconfig"; path = "Pods/Target Support Files/Pods-com-liferay-analytics-client/Pods-com-liferay-analytics-client.debug.xcconfig"; sourceTree = "<group>"; };
 		EB7C34E845C5EA8B0E53EC67 /* Pods-com-liferay-analytics-client.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-com-liferay-analytics-client.release.xcconfig"; path = "Pods/Target Support Files/Pods-com-liferay-analytics-client/Pods-com-liferay-analytics-client.release.xcconfig"; sourceTree = "<group>"; };
@@ -81,6 +84,7 @@
 			children = (
 				4A33A72F205179D80022628B /* AnalyticsEventsMessage.swift */,
 				4A33A73220517D710022628B /* Event.swift */,
+				4AC6339A205806FD005BBE45 /* IdentityContextMessage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -261,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AC633A8205838B0005BBE45 /* IdentityContextMessage.swift in Sources */,
 				4AC633A7205838AD005BBE45 /* Event.swift in Sources */,
 				4AC633A5205838A7005BBE45 /* AnalyticsEventsMessage.swift in Sources */,
 			);
@@ -270,6 +275,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AC6339B205806FD005BBE45 /* IdentityContextMessage.swift in Sources */,
 				4A33A73320517D710022628B /* Event.swift in Sources */,
 				4A33A730205179D80022628B /* AnalyticsEventsMessage.swift in Sources */,
 			);
