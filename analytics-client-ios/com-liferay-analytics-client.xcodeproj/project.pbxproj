@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		172DC103BFF255BE0D9AACA1 /* libPods-com-liferay-analytics-client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 133661E889073C7C76C657FD /* libPods-com-liferay-analytics-client.a */; };
 		4A3359DD2056B99000BAB411 /* libcom-liferay-analytics-client.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A9AFF2320502E4800DC7258 /* libcom-liferay-analytics-client.a */; };
+		4A33A730205179D80022628B /* AnalyticsEventsMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33A72F205179D80022628B /* AnalyticsEventsMessage.swift */; };
+		4AC633A5205838A7005BBE45 /* AnalyticsEventsMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33A72F205179D80022628B /* AnalyticsEventsMessage.swift */; };
+		4AC633A7205838AD005BBE45 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33A73220517D710022628B /* Event.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +40,8 @@
 		133661E889073C7C76C657FD /* libPods-com-liferay-analytics-client.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-com-liferay-analytics-client.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A3359D82056B99000BAB411 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A3359DC2056B99000BAB411 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4A33A72F205179D80022628B /* AnalyticsEventsMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEventsMessage.swift; sourceTree = "<group>"; };
+		4A33A73220517D710022628B /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		4A9AFF2320502E4800DC7258 /* libcom-liferay-analytics-client.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcom-liferay-analytics-client.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AC828512052BD2700FE5DF4 /* com-liferay-analytics-client-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "com-liferay-analytics-client-Bridging-Header.h"; sourceTree = "<group>"; };
 		9BB998709AFCA6CE66950979 /* Pods-com-liferay-analytics-client.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-com-liferay-analytics-client.debug.xcconfig"; path = "Pods/Target Support Files/Pods-com-liferay-analytics-client/Pods-com-liferay-analytics-client.debug.xcconfig"; sourceTree = "<group>"; };
@@ -71,6 +76,15 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
+		4A33A72D205179A30022628B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4A33A72F205179D80022628B /* AnalyticsEventsMessage.swift */,
+				4A33A73220517D710022628B /* Event.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		4A33A73120517A030022628B /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -82,6 +96,7 @@
 		4A9AFF1A20502E4800DC7258 = {
 			isa = PBXGroup;
 			children = (
+				4A33A72D205179A30022628B /* Model */,
 				4A3359D92056B99000BAB411 /* Tests */,
 				4A9AFF2420502E4800DC7258 /* Products */,
 				4F1EA4AB2DA0BB551FFB7A49 /* Pods */,
@@ -246,6 +261,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AC633A7205838AD005BBE45 /* Event.swift in Sources */,
+				4AC633A5205838A7005BBE45 /* AnalyticsEventsMessage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +270,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A33A73320517D710022628B /* Event.swift in Sources */,
+				4A33A730205179D80022628B /* AnalyticsEventsMessage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
