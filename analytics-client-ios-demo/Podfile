@@ -1,0 +1,7 @@
+target 'analytics-client-ios-demo' do
+  use_frameworks!
+  pod 'analytics-client-ios', :path => '../analytics-client-ios'
+  pod 'RxCocoa', ' 4.0.0'
+  pod 'RxBlocking', '4.0.0'
+  pod 'RxSwift', '4.0.0'
+end
