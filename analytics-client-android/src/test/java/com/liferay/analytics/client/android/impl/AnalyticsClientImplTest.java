@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import junit.framework.Assert;
 
@@ -92,7 +93,14 @@ public class AnalyticsClientImplTest {
 
 		RequestBody body = RequestBody.create(_MEDIA_TYPE, _getQuery(_userId));
 
-		OkHttpClient client = new OkHttpClient();
+		OkHttpClient.Builder clientBuilder = new OkHttpClient().newBuilder();
+
+		clientBuilder.readTimeout(300, TimeUnit.SECONDS);
+		clientBuilder.writeTimeout(300, TimeUnit.SECONDS);
+		clientBuilder.connectTimeout(300, TimeUnit.SECONDS);
+
+		OkHttpClient client = clientBuilder.build();
+
 		Request.Builder requestBuilder = new Request.Builder();
 
 		requestBuilder.url(
