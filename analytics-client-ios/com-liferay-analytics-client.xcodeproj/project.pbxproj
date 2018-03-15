@@ -170,13 +170,10 @@
 		4A9AFF1A20502E4800DC7258 = {
 			isa = PBXGroup;
 			children = (
-				4A95E7022053159B00F25FC7 /* Api */,
-				4A95E70B205327AC00F25FC7 /* Extensions */,
-				4A33A72D205179A30022628B /* Model */,
+				4AAEA248205AEED500C04AD7 /* Source */,
 				4A3359D92056B99000BAB411 /* Tests */,
 				4A9AFF2420502E4800DC7258 /* Products */,
 				4F1EA4AB2DA0BB551FFB7A49 /* Pods */,
-				4A33A73120517A030022628B /* Support Files */,
 				A76C75479C767F6BC74DB8D5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -188,6 +185,17 @@
 				4A3359D82056B99000BAB411 /* Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4AAEA248205AEED500C04AD7 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				4A95E7022053159B00F25FC7 /* Api */,
+				4A95E70B205327AC00F25FC7 /* Extensions */,
+				4A33A72D205179A30022628B /* Model */,
+				4A33A73120517A030022628B /* Support Files */,
+			);
+			path = Source;
 			sourceTree = "<group>";
 		};
 		4AC633A020581866005BBE45 /* Impl */ = {
