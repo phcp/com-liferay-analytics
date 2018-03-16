@@ -1,9 +1,104 @@
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
+buildscript {
+	dependencies {
+		classpath group: "com.jfrog.bintray.gradle", name: "gradle-bintray-plugin", version: "1.8.0"
+		classpath group: "com.github.dcendents", name: "android-maven-gradle-plugin", version: "2.0"
+	}
+	repositories {
+		jcenter()
+	}
+}
+
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+ext {
+	publishedGroupId = 'com.liferay'
+	libraryName = 'com.liferay.analytics.api'
+	libraryDescription = 'Liferay Analytics API'
+
+	bintrayRepo = 'liferay'
+	bintrayOrg = 'liferay'
+
+	versionCode = 100
+	versionName = '1.0.0'
+
+	siteUrl = 'https://github.com/liferay/com-liferay-analytics'
+	gitUrl = 'https://github.com/liferay/com-liferay-analytics.git'
+
+	licenseName = 'GNU Lesser General Public License, version 2.1'
+	licenseUrl = 'http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html'
+	allLicenses = ["LGPL-2.1"]
+}
+
 dependencies {
 	provided group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.1.0"
 
 	testCompile group: "junit", name: "junit", version: "4.12"
 	testCompile group: "org.apache.commons", name: "commons-lang3", version: "3.6"
+}
+
+task sourcesJar(type: Jar) {
+	classifier "sources"
+	from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+
+artifacts {
+	archives jar
+	archives javadocJar
+	archives sourcesJar
+}
+
+Properties properties = new Properties()
+try {
+	properties.load(project.project.file('local.properties').newDataInputStream())
+} catch (FileNotFoundException ignore) {
+}
+
+javadoc {
+	options.encoding = 'UTF-8'
+}
+
+version = versionName
+archivesBaseName = libraryName
+group = publishedGroupId
+
+bintray {
+	user = properties.getProperty("bintray.user")
+	key = properties.getProperty("bintray.apikey")
+
+	configurations = ['archives']
+
+	pkg {
+		repo = bintrayRepo
+		name = project.archivesBaseName
+		userOrg = bintrayOrg
+		desc = libraryDescription
+		websiteUrl = siteUrl
+		vcsUrl = gitUrl
+		licenses = allLicenses
+		publish = true
+	}
+}
+
+publishing {
+	publications {
+		jar(MavenPublication) {
+			from components.java
+			groupId group
+			artifactId libraryName
+			version versionName
+
+			artifact sourcesJar
+			artifact javadocJar
+		}
+	}
 }
