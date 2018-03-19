@@ -1,70 +1,88 @@
-apply plugin: 'com.android.library'
-apply plugin: "com.liferay.source.formatter"
-
-
 buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
+	repositories {
+		jcenter()
+		maven {
+			url 'https://maven.google.com/'
+			name 'Google'
+		}
 
-    }
-    dependencies {
-        classpath group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "latest.release"
-        classpath 'com.android.tools.build:gradle:3.0.1'
-    }
+	}
+	dependencies {
+		classpath group: "com.android.tools.build", name: "gradle", version: "3.0.1"
+		classpath group: "com.github.dcendents", name: "android-maven-gradle-plugin", version: "2.0"
+		classpath group: "com.jfrog.bintray.gradle", name: "gradle-bintray-plugin", version: "1.8.0"
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "latest.release"
+	}
+}
+
+apply plugin: "com.liferay.source.formatter"
+apply plugin: 'com.android.library'
+
+ext {
+	publishedGroupId = 'com.liferay'
+	libraryName = 'com.liferay.analytics.client.android'
+	libraryDescription = 'Liferay Analytics client for Android'
+
+	bintrayRepo = 'liferay-mobile'
+	bintrayOrg = 'liferay'
+
+	versionCode = 100
+	versionName = '1.0.0'
+
+	siteUrl = 'https://github.com/liferay/com-liferay-analytics'
+	gitUrl = 'https://github.com/liferay/com-liferay-analytics.git'
+
+	licenseName = 'GNU Lesser General Public License, version 2.1'
+	licenseUrl = 'http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html'
+	allLicenses = ["LGPL-2.1"]
 }
 
 allprojects {
-    repositories {
-        jcenter()
-        google()
-
-        maven {
-            url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
-        }
-    }
+	repositories {
+		jcenter()
+		google()
+	}
 }
 
 formatSource {
-    baseDirName = "src"
+	baseDirName = "src"
 }
 
 android {
-    compileSdkVersion 26
+	compileSdkVersion 26
 
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+	defaultConfig {
+		minSdkVersion 14
+		targetSdkVersion 26
+		versionCode 1
+		versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-    }
+	}
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            useProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+	buildTypes {
+		release {
+			minifyEnabled false
+			useProguard false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
 
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+	api group: "com.liferay", name: "com.liferay.analytics.api", version: "1.0.0"
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:2.15.0"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+	implementation fileTree(dir: "libs", include: ["*.jar"])
+	implementation group: "com.android.support", name: "appcompat-v7", version: "26.1.0"
+	implementation group: "com.google.code.gson", name: "gson", version: "2.8.2"
+	implementation group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "2.3.83"
+	implementation group: "com.squareup.okhttp3", name: "okhttp", version: "3.9.1"
 
-    implementation(group: 'com.liferay', name: "com.liferay.analytics.api", version: "1.0.0-20180201.051150-2"){transitive=true}
-    implementation(group: "com.liferay", name: "com.liferay.gradle.plugins.source.formatter", version: "2.3.83")
-
+	testImplementation group: "junit", name: "junit", version: "4.12"
+	testImplementation group: "org.mockito", name: "mockito-core", version: "2.15.0"
 }
+
+apply from: './bintray.gradle'
+apply from: './install.gradle'
